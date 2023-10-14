@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/templatemo-hexashop.css')}}">
+    <title>Actualizar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+</head>
+<body>
+
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <img src="{{url_for('static',filename='images/logoE.png')}}"> Tienda Tapiplas
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
+                            <li class="submenu">
+                                <a href="javascript:;">¿Que deseas hacer?</a>
+                              <ul>
+                                <li><a href="/ordenes/agregar" class="submenu">
+                                    <p> Agregar catalogo </p>
+                                    <li><a href="/ordenes/listar" class="submenu">
+                                        <p> Consultar orden </p>
+                                  
+                                    <li><a href="/ordenes/listar" class="submenu">
+                                        <p> Eliminar orden </p>
+                                    <li><a href="/usuarios/dashboard " class="submenu">
+                                          <p> Volver al menu  </p>
+                                    </a></li>
+                                </ul>
+                          </li>
+                      </ul>        
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Fecha de Órden de Servicio</th>
+                <th>Actualizar</th>
+                <th>Eliminar</th>
+            </tr>
+        <tbody>
+            {% for orden in ordenes %}
+        <tr>
+            <td>{{ orden.id }}</td>
+            <td>{{ orden.fecha_orden_servicio }}</td>
+            
+                <td><a href="/ordenes/editar/{{orden.id}}"><button  class="btn btn-primary btn-sm" id="btn-update" data-bs-toggle="modal" data-bs-target="#modal{{orden.id}}">Actualizar</button></a></td>
+                
+                <td><a href="/ordenes/eliminar/{{ orden.id }}"><button  class="btn btn-primary btn-sm" id="btn-update" data-bs-toggle="modal" data-bs-target="#modal{{orden.id}}">Eliminar</button></a></td>
+            
+        </tr>
+        {% endfor %}
+    </table>
+        </tbody>
+        </thead>
+        <footer class="site-footer">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                  <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
+                  </p>
+                </div>
+      
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                  <ul class="social-icons">
+                    <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
+                    <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
+                  </ul>
+                </div>
+              </div>
+            </div>
+      </footer>
+        
+    
+</body>
+</html>

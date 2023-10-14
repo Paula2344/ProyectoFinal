@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estilo.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/templatemo-hexashop.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    <title>login</title>
+</head>
+<body>
+    <div class="wrapper bg-white">
+    <div class="h2 text-center">Tapiplas</div>
+    <div class="h4 text-muted text-center pt-2">Ingrese sus datos de inicio de sesión</div>
+    <h2>Iniciar Sesión</h2>
+    
+    <!-- Ventana emergente para mensajes de éxito -->
+    
+
+    <!-- Ventana emergente para mensajes de error -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div id="error-alert" class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ messages[0][1] }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+    {% endwith %}
+    
+    <form class="pt-3" method="POST">
+        <div class="form-group py-2">
+            <div class="input-field">
+             <span class="far fa-user p-2">
+             </span>
+            <input type="email" name="correo" placeholder="Correo" autocomplete="off" required><br>
+            </div>
+        </div>
+        <div class="form-group py-1 pb-2">
+            <div class="input-field"> <span class="fas fa-lock p-2"></span> 
+                <input type="password" name="contrasena" placeholder="Contraseña" autocomplete="off" required><br>        
+                <button class="btn bg-white text-muted"> 
+                    <span class="far fa-eye-slash"></span> 
+                </button> 
+            </div>
+            <div class="d-flex align-items-start"> 
+                <div class="ml-auto"> <a href="#" id="forgot">¿Olvidaste tu contraseña?</a> </div>
+            </div>
+            <div class="d-flex align-items-start"> 
+            </div> <input type="submit" class="btn btn-block text-center my-3" value="Iniciar Sesión">
+            <a href="/">Cancelar</a>
+        </div> 
+    </form>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<footer class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-12">
+          <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
+          </p>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <ul class="social-icons">
+            <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
+            <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+</footer>
+
+<script>
+    // JavaScript para cerrar automáticamente las ventanas emergentes después de unos segundos
+    setTimeout(function() {
+        document.getElementById('success-alert').style.display = 'none';
+        document.getElementById('error-alert').style.display = 'none';
+    }, 5000);
+</script>
+
+</body>
+</html>
