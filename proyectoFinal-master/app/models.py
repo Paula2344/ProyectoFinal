@@ -69,9 +69,12 @@ class Cotizacion(db.Model):
     __tablename__ = 'cotizacion'
 
     id = Column(Integer, primary_key=True)
-    fecha_cotizacion = Column(Date)
-    descripcion = Column(String(255))
-    usuario_id = Column(Integer, ForeignKey('usuario.id'))
+    nombre = Column(String(255))
+    telefono = Column(String(10))
+    correo_electronico = Column(String(255))
+    ciudad = Column(String(255))
+    tipoServicio = Column(String(255))
+    detallesAdicionales = Column(String(255))
     # Puedes agregar otros campos aquí para los detalles de la cotización
 
 # Modelo para órdenes de servicio
