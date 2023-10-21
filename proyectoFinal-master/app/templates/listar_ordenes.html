@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
+
+
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Catalogo</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/templatemo-hexashop.css')}}">
     <title>Actualizar</title>
@@ -11,7 +13,6 @@
 
 </head>
 <body>
-
     <header class="header-area header-sticky">
         <div class="container">
             <div class="row">
@@ -26,12 +27,12 @@
                             <li class="submenu">
                                 <a href="javascript:;">¿Que deseas hacer?</a>
                               <ul>
-                                <li><a href="/ordenes/agregar" class="submenu">
+                                <li><a href="/catalogo/agregar" class="submenu">
                                     <p> Agregar catalogo </p>
-                                    <li><a href="/ordenes/listar" class="submenu">
-                                        <p> Consultar orden </p>
+                                    <li><a href="/catalogo/listar" class="submenu">
+                                        <p> Consultar catalogo </p>
                                   
-                                    <li><a href="/ordenes/listar" class="submenu">
+                                    <li><a href="/catalogo/listar" class="submenu">
                                         <p> Eliminar orden </p>
                                     <li><a href="/usuarios/dashboard " class="submenu">
                                           <p> Volver al menu  </p>
@@ -49,53 +50,87 @@
     <br>
     <br>
     <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-
+    
+    <h1>Lista de Catalogo</h1>
     <table class="table table-bordered">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Fecha de Órden de Servicio</th>
+                <th>Nombre</th>
+                <th>Telefono</th>
+                <th>correo Electronico</th>
+                <th>Material deseado</th>
+                <th>tipoServicio</th>
+                <th>detallesAdicionales</th>
+                <th>Imagenes inmueble</th>
+                <th>Imagenes inmueble</th>
+                <th>Imagenes inmueble</th>
                 <th>Actualizar</th>
                 <th>Eliminar</th>
             </tr>
-        <tbody>
-            {% for orden in ordenes %}
-        <tr>
-            <td>{{ orden.id }}</td>
-            <td>{{ orden.fecha_orden_servicio }}</td>
+            {% for ord in ordenes %}
+            {% with urlOrdenesDeServicio =  "/static/imagenes_OrdenServicio/" %}
+ 
+    
+    
+        <tr id="Registro_{{ ord.id }}"></tr>
+            <td>{{ ord.id }}</td>
+            <td>{{ ord.nombre }}</td>
+            <td>{{ ord.telefono }}</td>
+            <td>{{ ord.correo_electronico }}</td>
+            <td>{{ ord.materialFk }}</td>
+            <td>{{ ord.tipoServicio }}</td>
+            <td>{{ ord.detallesAdicionales }}</td>
+            <td><img src="{{ url_for('static', filename='imagenes_OrdenServicio/'  + ord.imagen1) }}" class="sin_foto_mini" width="45%" height="45%" alt="{{ ord.imagen1 }}"></td>
+            <td><img src="{{ url_for('static', filename='imagenes_OrdenServicio/'  + ord.imagen2) }}" class="sin_foto_mini" width="45%" height="45%" alt="{{ ord.imagen2 }}"></td>
+            <td><img src="{{ url_for('static', filename='imagenes_OrdenServicio/'  + ord.imagen3) }}" class="sin_foto_mini" width="45%" height="45%" alt="{{ ord.imagen3 }}"></td>
             
-                <td><a href="/ordenes/editar/{{orden.id}}"><button  class="btn btn-primary btn-sm" id="btn-update" data-bs-toggle="modal" data-bs-target="#modal{{orden.id}}">Actualizar</button></a></td>
+
+
+
+            <td><a href="/ordenes/editar/{{ord.id}}"><button  class="btn btn-primary btn-sm" id="btn-update" data-bs-toggle="modal" data-bs-target="#modal{{ord.id}}">Actualizar</button></a></td>
                 
-                <td><a href="/ordenes/eliminar/{{ orden.id }}"><button  class="btn btn-primary btn-sm" id="btn-update" data-bs-toggle="modal" data-bs-target="#modal{{orden.id}}">Eliminar</button></a></td>
+            <td><a href="/ordenes/eliminar/{{ ord.id }}"><button  class="btn btn-primary btn-sm" id="btn-update" data-bs-toggle="modal" data-bs-target="#modal{{ord.id}}">Eliminar</button></a></td>
             
         </tr>
+        {% endwith %}
         {% endfor %}
     </table>
-        </tbody>
-        </thead>
-        <footer class="site-footer">
-            <div class="container">
-              <div class="row">
-                <div class="col-md-8 col-sm-6 col-xs-12">
-                  <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
-                  </p>
-                </div>
-      
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                  <ul class="social-icons">
-                    <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
-                    <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
-                  </ul>
-                </div>
-              </div>
-            </div>
-      </footer>
-        
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
     
+    <footer class="site-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 col-sm-6 col-xs-12">
+              <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
+              </p>
+            </div>
+  
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <ul class="social-icons">
+                <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
+                <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
+              </ul>
+            </div>
+          </div>
+        </div>
+  </footer>
+    
+
 </body>
+
 </html>
+

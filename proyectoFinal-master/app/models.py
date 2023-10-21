@@ -82,8 +82,17 @@ class OrdenServicio(db.Model):
     __tablename__ = 'orden_servicio'
 
     id = Column(Integer, primary_key=True)
-    fecha_orden_servicio = Column(Date)
-    usuario_id = Column(Integer, ForeignKey('usuario.id'))
+    nombre = Column(String(255))
+    telefono = Column(String(10))
+    correo_electronico = Column(String(255))
+    materialFk = Column(Integer)
+    materialFk = Column(Integer, ForeignKey('material.id'))
+    material = relationship('Material', backref='orden_servicio')
+    tipoServicio = Column(String(255))
+    detallesAdicionales = Column(String(255))
+    imagen1 = Column(String(50))
+    imagen2 = Column(String(50))
+    imagen3 = Column(String(50))
 
 
     

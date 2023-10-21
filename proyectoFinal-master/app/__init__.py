@@ -28,13 +28,13 @@ from app.materiales import materiales_blueprint
 from app.ordenes import ordenes_blueprint
 from app.usuarios import usuario_blueprint
 from app.catalogo import catalogo_blueprint
-
+from app.cotizacion import cotizacion_blueprint
 #Vincular submodulos del proyecto
 app.register_blueprint(materiales_blueprint)
 app.register_blueprint(ordenes_blueprint)
 app.register_blueprint(usuario_blueprint)
 app.register_blueprint(catalogo_blueprint)
-
+app.register_blueprint(cotizacion_blueprint)
 #crear el objeto de modelos:
 
 

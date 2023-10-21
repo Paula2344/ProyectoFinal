@@ -67,7 +67,7 @@ def registro():
             
 
         nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
-                                 correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=2)
+                                 correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=1)
         app.db.session.add(nuevo_usuario)
         app.db.session.commit()
         flash('Registrado correctamente', 'success')
