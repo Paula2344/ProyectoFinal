@@ -2,7 +2,7 @@ from flask import Blueprint, jsonify, render_template, redirect, url_for, flash,
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, logout_user, current_user
-#from flask_mail import Mail, Message
+from flask_mail import Mail, Message
 import random
 import string
 from datetime import datetime, timedelta
@@ -40,16 +40,6 @@ def logout():
     flash('Has cerrado sesión', 'success')
     return redirect(url_for('usuario_blueprint.login'))
 
-
-def generar_token_verificacion():
-    caracteres = string.ascii_letters + string.digits
-    return ''.join(random.choice(caracteres) for _ in range(30))
-
-def enviar_correo_verificacion(usuario):
-    token = usuario.token_verificacion
-    mensaje = Message('Verifica tu correo electrónico', sender='tu_correo@gmail.com', recipients=[usuario.correo_electronico])
-    mensaje.body = f'Por favor, haz clic en el siguiente enlace para verificar tu correo electrónico: {url_for("usuario_blueprint.verificar_correo", token=token, _external=True)}'
-    app.mail.send(mensaje)
 @usuario_blueprint.route('/register', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
@@ -60,23 +50,51 @@ def registro():
         direccion = request.form['direccion']
         contrasena = request.form['contrasena']
 
+        # Genera un código de verificación aleatorio
+        codigo_verificacion = str(random.randint(1000, 9999))
+
         # Verificar si el correo ya está en uso
         usuario_existente = app.models.Usuario.query.filter_by(correo_electronico=correo).first()
 
         if usuario_existente:
             flash('El correo electrónico ya está registrado. Por favor, utiliza otro correo.', 'danger')
-            
+        else:
+            nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
+                                    correo_electronico=correo, direccion=direccion, contrasena=contrasena,rol_id=2, codigo_verificacion=codigo_verificacion)
+            app.db.session.add(nuevo_usuario)
+            app.db.session.commit()
 
-        nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
-                                 correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=1)
-        app.db.session.add(nuevo_usuario)
-        app.db.session.commit()
-        flash('Registrado correctamente', 'success')
-        return redirect(url_for('usuario_blueprint.login'))
+            # Envía el código de verificación por correo electrónico
+            message = Message('Código de Verificación', sender='tu_correo@tudominio.com', recipients=[correo])
+            message.body = f'Tu código de verificación es: {codigo_verificacion}'
+            app.mail.send(message)
+
+            flash('Se ha enviado un código de verificación a tu correo electrónico. Por favor, verifica tu correo para completar el registro.', 'success')
+
+            return redirect(url_for('usuario_blueprint.verificar'))
 
     return render_template('registro.html')
 
 
+@usuario_blueprint.route('/verificar', methods=['GET', 'POST'])
+def verificar():
+    if request.method == 'POST':
+        correo = request.form['correo']
+        codigo_ingresado = request.form['codigo_verificacion']
+        usuario_actual = app.models.Usuario.query.filter_by(correo_electronico=correo).first()
+
+        if usuario_actual and codigo_ingresado == usuario_actual.codigo_verificacion:
+            usuario_actual.correo_verificado = True
+            app.db.session.commit()
+            return jsonify({'status': 'success', 'message': 'El codigo de verificacion fue validado, Bienvenido'})
+        else:
+            resultado = f'Código de verificación incorrecto para el correo electrónico {correo}. Inténtalo nuevamente.'
+            return jsonify({'status': 'danger', 'message': 'El codigo de verificacion es incorrecto'})
+
+        # Renderiza la plantilla verificar.html nuevamente y pasa el resultado a la ventana emergente
+        return render_template('verificar.html')
+
+    return render_template('verificar.html')
 
 
 @usuario_blueprint.route('/dashboard')

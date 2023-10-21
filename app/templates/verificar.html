@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificar Código de Verificación</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/verificar.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-2">
+                <h1>Check your email!</h1>
+                <p class="desc">We’ve sent a four-digit confirmation code to Enter it below to confirm your email address.</p>
+                <br><br><br>
+                <label><span class="normal">Your </span>confirmation code</label>
+                <form method="POST">
+                    <label for="correo">Correo:</label>
+                    <input type="email" name="correo" placeholder="Correo" autocomplete="off" required><br>
+                    <label for="codigo_verificacion">Correo:</label>
+                    <input type="number" name="codigo_verificacion" placeholder="Codigo verificacion" autocomplete="off" required><br>
+
+                    <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">Verificar</button>
+
+                    <!-- Ventana Emergente -->
+                    <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Resultado de la verificación</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>El resultado de la verificación aparecerá aquí.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+            </div><!-- endof col -->
+        </div>
+    </div>
+</body>
+</html>

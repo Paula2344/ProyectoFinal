@@ -61,7 +61,7 @@
 
                 <div class="text-center">
                   
-                <form method="POST" action="/materiales/editar/{{ material.id }}">
+                <form method="POST" action="/materiales/editar/{{ material.id }}" enctype="multipart/form-data">
                   <h4 class="mt-1 mb-5 pb-1">Actualizar un material</h4>
                 </div>
 
@@ -69,7 +69,12 @@
                 <div class="form-outline mb-4">
                   <input type="text" id="nombre" name="nombre" value="{{ material.nombre_material }}" class="form-control" placeholder="Nombre Material" required>
                  </div>
-            
+                 
+                 <div class="form-outline mb-4">
+                  <label for="imagen_material">Nueva foto del material</label>
+                  <input type="file" name="imagen_material" class="form-control-file" accept="image/*">
+              </div>
+
                  <div class="form-outline mb-4">
                   <textarea id="descripcion" name="descripcion" class="form-control">{{ material.descripcion }} </textarea>
                 </div>
