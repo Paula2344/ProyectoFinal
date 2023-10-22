@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head> 
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">
+    <link rel="stylesheet" type="text css" href="{{url_for('static',filename='css/footer.css')}}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3Q dgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.14.0/dist/sweetalert2.min.js"></script>
+    <title>Insertar Catálogo</title>
+</head>
+<body>
+<header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <div class="logo">
+                          <img src="{{url_for('static',filename='images/logoE.png')}}">
+                            </div>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                          <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesión</a></li>
+                          <li class="submenu">
+                            <a href="javascript:;">¿Qué deseas hacer?</a>
+                            <ul>
+                                <li><a href="/catalogo/agregar" class="submenu">
+                                  <p> Agregar catálogo</p>
+                                  <li><a href="/catalogo/listar" class="submenu">
+                                      <p> Consultar material </p>
+                                <li><a href="/catalogo/listar" class="submenu">
+                                  <p> Actualizar material </p>
+                                  <li><a href="/catalogo/listar" class="submenu">
+                                      <p> Eliminar material </p>
+                                  <li><a href="/usuarios/dashboard " class="submenu">
+                                        <p> Volver al menú  </p>
+                                  </a></li>
+                              </ul>
+                        </li>
+                    </ul>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header><br>
+    <br>
+    <br>
+ 
+<section class="h-100 gradient-form" style="background-color: #eee;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
+
+                <div class="text-center">
+
+                  <h4 class="mt-1 mb-5 pb-1">Registrar un catálogo</h4>
+                </div>
+
+                <form id="catalogoForm" action="/catalogo/agregar" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    <p>Ingresa los datos del catálogo</p>
+
+                    <div class="form-outline mb-4">
+                        <label for="nombre_catalogo">Nombre del catálogo</label>
+                        <input type="text" name="nombre_catalogo" class="form-control"
+                        placeholder="Nombre del catálogo" required autofocus>
+                    </div>
+                    <div class="col">
+                        <label for="imagen_catalogo">Foto Catálogo</label>
+                        <input type="file" name="imagen_catalogo" class="form-control-file" accept="image/*" required>
+                    </div> <br>
+                    <br>
+                    <div class="d-flex align-items-center justify-content-center pb-4">
+                        <a class="cancelar" href="/catalogo/listar">Cancelar</a>&nbsp;&nbsp;&nbsp;&nbsp; 
+                        <button type="button" class="btn btn-outline-danger" id="btn-registrar">Registrar</button>
+                    </div>
+                </form>
+              </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center derecha">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <img src="{{url_for('static',filename='images/logo5.png')}}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+<div class="container">
+<div class "row">
+<div class="col-md-8 col-sm-6 col-xs-12">
+<p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
+</p>
+</div>
+
+<div class="col-md-4 col-sm-6 col-xs-12">
+<ul class="social-icons">
+  <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
+  <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
+</ul>
+</div>
+</div>
+</div>
+</footer>
+
+<script>
+  // Agregar evento clic al botón de registro
+  document.querySelector('#btn-registrar').addEventListener('click', function() {
+    // Obtener los datos del catálogo
+    const nombreCatalogo = document.querySelector('[name="nombre_catalogo"]').value;
+    const imagenCatalogo = document.querySelector('[name="imagen_catalogo"]').files[0];
+    
+    // Mostrar una ventana emergente de confirmación
+    Swal.fire({
+      title: 'Confirmar Registro',
+      text: '¿Estás seguro de que deseas registrar este catálogo?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // El usuario confirmó el registro, aquí puedes enviar el formulario.
+        const formData = new FormData();
+        formData.append('nombre_catalogo', nombreCatalogo);
+        formData.append('imagen_catalogo', imagenCatalogo);
+        
+        fetch('/catalogo/agregar', {
+          method: 'POST',
+          body: formData,
+        }).then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              mostrarResultadoModal('Catálogo registrado con éxito');
+            } else {
+              mostrarResultadoModal('Error al registrar el catálogo');
+            }
+          });
+      }
+    });
+  });
+
+  function mostrarResultadoModal(mensaje) {
+    const resultadoMensajeElement = document.getElementById('resultadoMensaje');
+    resultadoMensajeElement.textContent = mensaje;
+    const resultadoModal = new bootstrap.Modal(document.getElementById('resultadoModal'));
+    resultadoModal.show();
+  }
+</script>
+</body>
+</html>

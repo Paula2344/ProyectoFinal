@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificar Código de Verificación</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/verificar.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-2">
+                <h1>Check your email!</h1>
+                <p class="desc">We’ve sent a four-digit confirmation code. Enter it below to confirm your email address.</p>
+                <br><br><br>
+                <label><span class="normal">Your </span>confirmation code</label>
+                <form method="POST" id="verificationForm">
+                    <label for="correo">Correo:</label>
+                    <input type="email" name="correo" placeholder="Correo" autocomplete="off" required><br>
+                    <label for="codigo_verificacion">Código de Verificación:</label>
+                    <input type="number" name="codigo_verificacion" placeholder="Código de Verificación" autocomplete="off" required><br>
+
+                    <button type="button" class="btn btn-primary" id="verificarButton">Verificar</button>
+                </form>
+            </div><!-- end of col -->
+        </div>
+    </div>
+
+
+
+<script>
+    document.getElementById("verificarButton").addEventListener("click", function () {
+        var correo = document.querySelector('input[name="correo"]').value;
+        var codigo_verificacion = document.querySelector('input[name="codigo_verificacion"]').value;
+
+        // Realizar una solicitud AJAX al servidor para verificar el código
+        $.ajax({
+            type: 'POST',
+            url: 'verificar',  // Asegúrate de que la URL sea correcta para tu aplicación
+            data: {
+                correo: correo,
+                codigo_verificacion: codigo_verificacion
+            },
+            success: function (response) {
+                Swal.fire({
+                    title: "Resultado de la verificación",
+                    text: response.message,
+                    icon: response.status === 'success' ? "success" : "error",
+                });
+            },
+            error: function (error) {
+                Swal.fire({
+                    title: "Error",
+                    text: "Hubo un error en la solicitud.",
+                    icon: "error",
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
