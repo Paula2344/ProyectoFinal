@@ -93,7 +93,8 @@ class OrdenServicio(db.Model):
     imagen1 = Column(String(50))
     imagen2 = Column(String(50))
     imagen3 = Column(String(50))
-
+    usuario_id = Column(Integer, ForeignKey('usuario.id'))
+    usuario = relationship('Usuario', backref='ordenes_servicio')
 
     
 

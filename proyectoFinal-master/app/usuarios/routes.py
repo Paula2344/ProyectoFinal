@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash,request
-
+from flask_wtf import FlaskForm
+from wtforms import IntegerField, SubmitField
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_user, login_required, logout_user, current_user
 #from flask_mail import Mail, Message
@@ -10,14 +11,23 @@ import app
 #from app.models import Material
 from . import usuario_blueprint
 from flask import flash, url_for, render_template
+
+
+
+
+
+
 #from flask_bcrypt import generate_password_hash
 
 
 @usuario_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
+    form = LoginForm()
+    
     if current_user.is_authenticated:
-        return redirect(url_for('usuario_blueprint.dashboard'))
-
+        # Si el usuario ya ha iniciado sesión, obtener su ID y redirigirlo al dashboard
+        return redirect(url_for('usuario_blueprint.dashboard', id=current_user.id))
+    
     if request.method == 'POST':
         correo_electronico = request.form['correo']
         contrasena = request.form['contrasena']
@@ -25,12 +35,12 @@ def login():
 
         if usuario and usuario.contrasena == contrasena:
             login_user(usuario)
-            return redirect(url_for('usuario_blueprint.dashboard'))
+            # Después de iniciar sesión con éxito, redirigir al dashboard con el ID del usuario actual
+            return redirect(url_for('usuario_blueprint.dashboard', id=usuario.id))
         else:
             flash('Credenciales incorrectas', 'danger')  # Mensaje de error
 
-    return render_template('login.html')
-
+    return render_template('login.html', form=form)
 
 @usuario_blueprint.route('/logout')
 @login_required
@@ -70,6 +80,9 @@ def registro():
                                  correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=1)
         app.db.session.add(nuevo_usuario)
         app.db.session.commit()
+       
+
+
         flash('Registrado correctamente', 'success')
         return redirect(url_for('usuario_blueprint.login'))
 
@@ -78,13 +91,14 @@ def registro():
 
 
 
-@usuario_blueprint.route('/dashboard')
+@usuario_blueprint.route('/dashboard/<int:id>')
 @login_required
-def dashboard():
+def dashboard(id):
+    usuarios = app.models.Usuario.query.get(id)
     if current_user.rol.nombre_rol == 'admin':
-        return render_template('admin_dashboar.html')
+        return render_template('admin_dashboar.html',usuarios=usuarios)
     elif current_user.rol.nombre_rol == 'cliente':
-        return render_template('user_dashboard.html')
+        return render_template('user_dashboard.html',usuarios=usuarios)
     else:
         return "Rol no válido para el dashboard"
 
@@ -110,9 +124,9 @@ def actualizar_perfil(usuario_id, nombre, apellido, correo, direccion,contrasena
         return False, "Usuario no encontrado."
 
     
-@usuario_blueprint.route('/perfil/<int:usuario_id>', methods=['GET', 'POST'])
-def perfil(usuario_id):
-    usuario = app.models.Usuario.query.get(usuario_id)
+@usuario_blueprint.route('/perfil/<int:id>', methods=['GET', 'POST'])
+def perfil(id):
+    usuario = app.models.Usuario.query.get(id)
 
     if request.method == 'POST':
         nuevo_nombre = request.form['nombre']
@@ -121,7 +135,7 @@ def perfil(usuario_id):
         nueva_direccion = request.form['direccion']
         nueva_contrasena = request.form['contrasena']
 
-        resultado, mensaje = actualizar_perfil(usuario_id,nuevo_nombre, nuevo_apellido, nuevo_correo, nueva_direccion, nueva_contrasena)
+        resultado, mensaje = actualizar_perfil(id,nuevo_nombre, nuevo_apellido, nuevo_correo, nueva_direccion, nueva_contrasena)
 
         if resultado:
             return "Informacion actualizada correctamente"
@@ -129,7 +143,7 @@ def perfil(usuario_id):
         else:
             return "error"
 
-    return render_template('perfil.html',usuario_id=usuario_id)
+    return render_template('perfil.html',usuario=id)
 
 
 
@@ -159,3 +173,7 @@ def verificar_correo(token):
     
 
 
+
+class LoginForm(FlaskForm):
+    id = IntegerField('ID')
+    submit = SubmitField('Submit')

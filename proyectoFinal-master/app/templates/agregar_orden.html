@@ -27,15 +27,15 @@
                             <li class="submenu">
                               <a href="javascript:;">¿Que deseas hacer?</a>
                               <ul>
-                                  <li><a href="/materiales/agregar" class="submenu">
-                                    <p> Agregar material</p>
-                                    <li><a href="/materiales/listar" class="submenu">
-                                        <p> Consultar material </p>
-                                  <li><a href="/materiales/listar" class="submenu">
-                                    <p> Actualizar material </p>
-                                    <li><a href="/materiales/listar" class="submenu">
-                                        <p> Eliminar material </p>
-                                    <li><a href="/usuarios/dashboard " class="submenu">
+                                  <li><a href="/ordenes/agregar/{{ usuario.id }}" class="submenu">
+                                    <p> Cotizar</p>
+                                    <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
+                                        <p> Consultar ordenes </p>
+                                  <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
+                                    <p> Actualizar mi orden </p>
+                                    <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
+                                        <p> Eliminar orden </p>
+                                    <li><a href="/usuarios/dashboard/{{ usuario.id }} " class="submenu">
                                           <p> Volver al menu  </p>
                                     </a></li>
                                 </ul>
@@ -64,23 +64,31 @@
                   <h4 class="mt-1 mb-5 pb-1">Registra una orden de servicio</h4>
                 </div>
 
-                <form method="POST" action="/ordenes/agregar" enctype="multipart/form-data">
+                <form method="POST" action="/ordenes/agregar/{{ usuario.id }}" enctype="multipart/form-data">
                     <p>Ingresa los datos de objeto a tapizar</p>
                 
                     <div class="form-outline mb-4">
-                      <input type="text" id="nombre" name="nombre" class="form-control"
+                      <input type="text" id="nombre" value="{{ usuario.nombre}}" name="nombre" class="form-control"
                         placeholder="Nombre CT" required autofocus/>
                     </div>
                 
                     <div class="form-outline mb-4">
-                      <input type="text" id="telefono" name="telefono" class="form-control" 
+                      <input type="text" id="telefono" value="{{ usuario.telefono}}"  name="telefono" class="form-control" 
                         placeholder="telefono CT" required/>
                     </div>
                 
                     <div class="form-outline mb-4">
-                      <input type="email" id="correo_electronico" name="correo_electronico" class="form-control" 
+                      <input type="email" id="correo_electronico" value="{{ usuario.correo_electronico}}" name="correo_electronico" class="form-control" 
                         placeholder="correo_electronico" required/>
                     </div>
+
+                    <label for="materialFk">Seleccionar un valor de Tabla2:</label>
+                    <select id="materialFk" name="materialFk">
+                        <option value="">Seleccionar...</option>
+                        {% for Mat in materialFk %}
+                            <option value="{{ Mat.id }}">{{ Mat.nombre_material}}      color:{{ Mat.color}}</option>
+                        {% endfor %}
+                    </select>
 
                     <div class="form-outline mb-4">
                       <label for="imagen1">Foto del inmueble</label>

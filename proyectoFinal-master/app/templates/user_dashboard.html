@@ -24,9 +24,9 @@
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
                             <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
-                            <li class="scroll-to-section"><a href="/ordenes/listar">Ver mis ordenes de servicio</a></li>
-                            <li class="scroll-to-section"><a href="#">Realizar cotizacion</a></li>
-                            <li class="scroll-to-section"><a href="/usuarios/perfil/{{ usuario_id }}">Ver perfil</a></li>
+                            <li class="scroll-to-section"><a href="/ordenes/mostrar/{{usuarios.id}}">Ver mis ordenes de servicio</a></li>
+                            <li class="scroll-to-section"><a href="/ordenes/agregar/{{usuarios.id}}">Realizar cotizacion</a></li>
+                            <li class="scroll-to-section"><a href="/usuarios/perfil/{{ usuarios.id }}">Ver perfil</a></li>
                             <!-- ***** Menu End ***** -->
                     </nav>
                 </div>

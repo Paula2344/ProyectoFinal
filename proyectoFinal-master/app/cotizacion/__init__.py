@@ -1,3 +1,4 @@
+#Dependencia para hacer un blueprint/paquete
 from flask import Blueprint
 
 #Definir paquete de productos
