@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">"
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">"
+
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Catalogo</title>
+</head>
+<body>
+<header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- *** Logo Start *** -->
+                        <div class="logo">
+                            <img src="{{url_for('static',filename='images/logoE.png')}}">
+                            </div>
+                        <!-- *** Logo End *** -->
+                        <!-- *** Menu Start *** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="../index.html">Cerrar sesion</a></li>
+                          
+                        </ul>        
+                        <!-- *** Menu End *** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header><br>
+    <br>
+    <br>
+
+<section class="h-100 gradient-form" style="background-color: #eee;">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-xl-10">
+        <div class="card rounded-3 text-black"> 
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="card-body p-md-5 mx-md-4">
+
+                <div class="text-center">
+
+                  <h4 class="mt-1 mb-5 pb-1">Actualiza los datos de tu cotizacion</h4>
+                </div>
+                    <form action="/ordenes/editar/{{ orden.id }}" method="POST" class="mb-3" autocomplete="off" enctype="multipart/form-data">
+                        
+                            <div class="form-outline mb-4">
+                                <label for="nombre">Nombre Cliente</label><br>
+                                <input type="text" name="nombre" value="{{ orden.nombre }}" class="form-control"  placeholder="Nombre Cliente" required autofocus>
+                            </div>
+                            <div class="form-outline mb-4">
+                                <label for="telefono">Telefono Cliente</label><br>
+                                <input type="number" name="telefono" value="{{ orden.telefono }}" class="form-control"  placeholder="Telefono Cliente" required autofocus>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                              <label for="correo_electronico">correo_electronico</label><br>
+                              <input type="email" name="correo_electronico" value="{{ orden.correo_electronico }}" class="form-control"  placeholder="correo_electronico" required autofocus>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                              <label for="materialFk">materialFk</label><br>
+                              <input type="text" name="materialFk" value="{{ orden.materialFk }}" class="form-control"  placeholder="materialFk" required autofocus>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                              <label for="tipoServicio">tipoServicio</label><br>
+                              <input type="text" name="tipoServicio" value="{{ orden.tipoServicio }}" class="form-control"  placeholder="tipoServicio" required autofocus>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                              <label for="detallesAdicionales">detallesAdicionales</label><br>
+                              <input type="text" name="detallesAdicionales" value="{{ orden.detallesAdicionales }}" class="form-control"  placeholder="detallesAdicionales" required autofocus>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                              <label for="imagen1">Foto del inmueble</label>
+                              <input type="file"  name="imagen1" value="{{orden.imagen1}}" class="form-control-file" accept="image/*" required>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                              <label for="imagen2">Foto del inmueble</label>
+                              <input type="file"  name="imagen2" value="{{orden.imagen2}}" class="form-control-file" accept="image/*" required>
+                          </div>
+
+                          <div class="form-outline mb-4">
+                              <label for="imagen3">Foto del inmueble</label>
+                              <input type="file"  name="imagen3" value="{{orden.imagen3}}" class="form-control-file" accept="image/*" required>
+                        </div>
+                            
+                            <div class="d-flex align-items-center justify-content-center pb-4">
+                              <a class="cancelar" href="/ordenes/mostrar/{{orden.id}}">Volver a la lista</a>&nbsp;&nbsp;&nbsp;&nbsp; 
+                                <button type="submit" class="btn btn-outline-danger">Guardar cambios</button>
+                                </div>
+                        
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-lg-6 d-flex align-items-center derecha">
+              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                <img src="{{url_for('static',filename='images/logo5.png')}}">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 col-sm-6 col-xs-12">
+          <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
+          </p>
+        </div>
+
+        <div class="col-md-4 col-sm-6 col-xs-12">
+          <ul class="social-icons">
+            <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
+            <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
+          </ul>
+        </div>
+      </div>
+    </div>
+</footer>
+ 
+
+</body>
+</html>

@@ -1,0 +1,12 @@
+footer{
+    max-width: 100%;
+    background-color: #CBDDB5;
+    margin: auto;
+    border-radius: 0 0 40px 40 px;
+    color: #fff;
+    text-align: center;
+    padding: 50px;
+    box-sizing: border-box;
+    font-family: arial;
+    font-size: 18px;
+}

@@ -1,0 +1,7 @@
+__pycache__/*
+proyecto/*
+migrations/*
+app/__pycache__/*
+app/materiales/__pycache__/*
+app/ordenes/__pycache__/*
+app/usuarios/__pycache__/*

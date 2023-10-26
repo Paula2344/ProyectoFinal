@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verificar Código de Verificación</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/verificar.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-2">
+                <h1>Check your email!</h1>
+                <p class="desc">We’ve sent a four-digit confirmation code. Enter it below to confirm your email address.</p>
+                <br><br><br>
+                <label><span class="normal">Your </span>confirmation code</label>
+                <form method="POST" id="verificationForm">
+                    <label for="correo">Correo:</label>
+                    <input type="email" name="correo" placeholder="Correo" autocomplete="off" required><br>
+                    <label for="codigo_verificacion">Código de Verificación:</label>
+                    <input type="number" name="codigo_verificacion" placeholder="Código de Verificación" autocomplete="off" required><br>
+
+                    <button type="submit" href="{{url_for('usuario_blueprint.login')}}" class="btn btn-primary" id="verificarButton">Verificar</button>
+                </form>
+            </div><!-- end of col -->
+        </div>
+    </div>
+
+
+
+
+</body>
+</html>

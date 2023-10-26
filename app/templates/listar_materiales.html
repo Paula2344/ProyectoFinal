@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- ... (código anterior) ... -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">"
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">"
+</head>
+<body>
+    <header class="header-area header-sticky">
+        <header class="header-area header-sticky">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <nav class="main-nav">
+                            <!-- ***** Logo Start ***** -->
+                            <div class="logo">
+                              <img src="{{url_for('static',filename='images/logoE.png')}}">
+                                </div>
+                            <!-- ***** Logo End ***** -->
+                            <!-- ***** Menu Start ***** -->
+                            <ul class="nav">
+                                <li class="scroll-to-section"><a href="/index">Cerrar sesion</a></li>
+                                <li class="submenu">
+                                  <a href="javascript:;">¿Que deseas hacer?</a>
+                                  <ul>
+                                      <li><a href="/materiales/agregar" class="submenu">
+                                        <p> Agregar material</p>
+                                        <li><a href="/materiales/listar" class="submenu">
+                                            <p> Consultar material </p>
+                                      <li><a href="/materiales/listar" class="submenu">
+                                        <p> Actualizar material </p>
+                                        <li><a href="/materiales/listar" class="submenu">
+                                            <p> Eliminar material </p>
+                                        <li><a href="/usuarios/dashboard/1" class="submenu">
+                                              <p> Volver al menu  </p>
+                                        </a></li>
+                                    </ul>
+                              </li>
+                          </ul> 
+    </header>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+
+    <!-- ... (otros elementos HTML) ... -->
+    <table class="table table-bordered">
+        <thead>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre material</th>
+                        <th>Imagen material</th>
+                        <th>Descripcion</th>
+                        <th>Precio</th>
+                        <th>Cantidad en stock</th>
+                        <th>Unidad de medida</th>
+                        <th>Color</th>
+                    
+                        {% for material in materiales %}
+            {% with urlMaterial =  "/static/imagenes_material/" %}
+        </thead>
+        <tbody>
+            
+            <tr>
+                <th scope="row">{{ material.id }}</th>
+                <td>{{ material.nombre_material }}</td>
+                <td><img src="{{ url_for('static', filename='imagenes_material/'+ material.imagen_material) }}" class="sin_foto_mini" width="45%" height="45%" alt="{{ material.nombre }}"></td>
+                <td>{{ material.descripcion }}</td>
+                <td>{{ material.precio }}</td>
+                <td>{{ material.cantidad_stock }}</td>
+                <td>{{ material.unidad_medida }}</td>
+                <td>{{ material.color }}</td>
+                <td>
+                    <a href="/materiales/editar/{{ material.id }}">
+                        <button class="btn btn-primary btn-sm" id="btn-update">
+                            Actualizar
+                        </button>
+                    </a>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm" id="btn-delete-{{ material.id }}" data-material-id="{{ material.id }}">
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+            {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+    <!-- ... (código del pie de página) ... -->
+    <script>
+        // Agregar evento clic a los botones de eliminación
+        document.querySelectorAll('[id^="btn-delete-"]').forEach(function(button) {
+            const materialId = button.getAttribute('data-material-id');
+            button.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Eliminar Material',
+                    text: '¿Estás seguro de que deseas eliminar este material?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Sí',
+                    cancelButtonText: 'No',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Redirigir para eliminar el material
+                        window.location.href = `/materiales/eliminar/${materialId}`;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
