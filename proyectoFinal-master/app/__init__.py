@@ -5,7 +5,8 @@ from flask_login import LoginManager
 from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
-
+from flask_mail import Mail
+from app.config_mail import MailConfig
 import random
 import string
 #Dependencia de configuracion 
@@ -22,6 +23,9 @@ app = Flask(__name__)
 
 #Configuracion del objeto flask
 app.config.from_object(Config)
+#Configuracion del objeto email
+app.config.from_object(MailConfig)
+mail = Mail(app)
 
 #Importar el modulo 
 from app.materiales import materiales_blueprint

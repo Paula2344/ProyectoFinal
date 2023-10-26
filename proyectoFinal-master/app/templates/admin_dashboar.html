@@ -22,7 +22,7 @@
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
+                            <li class="scroll-to-section"><a href="#" id="logout-link">Cerrar sesión</a></li>
                             <li class="scroll-to-section"><a href="{{ '/materiales/listar' }}">Gestion de materiales</a></li>
                             <li class="scroll-to-section"><a href="{{ '/ordenes/listar' }}">Gestion de ordenes</a></li>
                             <li class="scroll-to-section"><a href="{{ '/catalogo/listar' }}">Gestion de catalogos</a></li>
@@ -52,6 +52,25 @@
           </div>
         </div>
   </footer>
-    
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+  <script>
+      // Agrega un evento clic al enlace "Cerrar sesión"
+      document.getElementById('logout-link').addEventListener('click', function (event) {
+          event.preventDefault();
+          Swal.fire({
+              title: 'Cerrar Sesión',
+              text: '¿Estás seguro de que deseas cerrar sesión?',
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonText: 'Sí',
+              cancelButtonText: 'No',
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Redirige al usuario a la ruta de logout si confirma
+                  window.location.href = "{{ url_for('usuario_blueprint.logout') }}";
+              }
+          });
+      });
+  </script>
 </body>
 </html>

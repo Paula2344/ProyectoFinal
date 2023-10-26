@@ -137,5 +137,26 @@
           </div>
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript">
+    // Agrega un evento clic al botón "Actualizar datos"
+    document.getElementById('update-button').addEventListener('click', function () {
+        Swal.fire({
+            title: 'Actualizar Perfil',
+            text: '¿Estás seguro de que deseas actualizar tu perfil?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí',
+            cancelButtonText: 'No',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Realiza la actualización si confirma
+                $('#update-form').submit();
+            }
+        });
+    });
+</script>
 </body>
 </html>

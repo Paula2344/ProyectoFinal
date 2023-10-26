@@ -44,6 +44,7 @@ class Usuario(UserMixin,db.Model):
     direccion = Column(String(255))
     rol_id = Column(Integer)
     contrasena = Column(String(255))
+    codigo_verificacion = Column(String(4))
     rol_id = Column(Integer, ForeignKey('rol_usuario.id'))
 
     rol = relationship('RolUsuario', backref='usuarios')
@@ -61,6 +62,8 @@ class Material(db.Model):
     cantidad_stock = Column(Integer)
     unidad_medida = Column(String(50))
     color = Column(String(50))
+    imagen_material = Column(String(50))
+
 
 
 

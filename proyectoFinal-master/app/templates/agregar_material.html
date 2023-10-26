@@ -4,6 +4,11 @@
 <head> 
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">"
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">"
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">"
@@ -23,7 +28,7 @@
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <li class="scroll-to-section"><a href="/index">Cerrar sesion</a></li>
+                            <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
                             <li class="submenu">
                               <a href="javascript:;">¿Que deseas hacer?</a>
                               <ul>
@@ -64,13 +69,18 @@
                   <h4 class="mt-1 mb-5 pb-1">Registra un material</h4>
                 </div>
 
-                <form method="POST" action="/materiales/agregar">
+                <form method="POST" action="/materiales/agregar" enctype="multipart/form-data">
                     <p>Ingresa los datos del material</p>
                 
-                    <div class="form-outline mb-4">
-                      <input type="text" id="nombre" name="nombre" class="form-control"
-                        placeholder="Nombre del material" required autofocus/>
-                    </div>
+                   
+              <div class="form-outline mb-4">
+                  <input type="text" id="nombre" name="nombre" class="form-control"
+                  placeholder="Nombre del material" required autofocus/>
+              </div>
+            <div class="form-outline mb-4">
+                <label for="imagen">Foto Material</label>
+                <input type="file" name="imagen" class="form-control-file" accept="image/*" required>
+            </div>
                 
                     <div class="form-outline mb-4">
                       <input type="text" id="descripcion" name="descripcion" class="form-control" 
@@ -98,7 +108,7 @@
                     </div>
                 
                     <div class="d-flex align-items-center justify-content-center pb-4">
-                    <button type="submit" class="btn btn-outline-danger">Registrar</button>&nbsp;&nbsp;&nbsp;&nbsp; 
+                      <input type="submit" id="btn-register" value="Registrar" class="btn btn-primary"></button>&nbsp;&nbsp;&nbsp;&nbsp; 
                     <a class="cancelar" href="/materiales/listar">Cancelar</a>
                     </div>
                    
@@ -134,7 +144,50 @@
     </div>
   </div>
 </footer>
- 
+
+<script>
+  // Agregar evento clic al botón de registro
+  document.querySelector('#btn-register').addEventListener('click', function() {
+    // Obtener los datos del material
+    const nombre = document.getElementById('nombre').value;
+    const descripcion = document.getElementById('descripcion').value;
+    const precio = document.getElementById('precio').value;
+    const cantidad_stock = document.getElementById('cantidad_stock').value;
+    const unidad_medida = document.getElementById('unidad_medida').value;
+    const color = document.getElementById('color').value;
+  
+    // Crear una ventana emergente
+    const swal = Swal.fire({
+      title: 'Registrar Material',
+      text: '¿Estás seguro de registrar este material?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí',
+      cancelButtonText: 'No',
+      closeOnConfirm: false,
+      closeOnCancel: false,
+    });
+  
+    // Validar los datos del material
+    if (!nombre || !descripcion || !precio || !cantidad_stock || !unidad_medida || !color) {
+      // Mostrar un mensaje de error
+      swal.fire({
+        title: 'Error',
+        text: 'Todos los campos son obligatorios.',
+        icon: 'error',
+      });
+    } else {
+      // Enviar el formulario para registrar el material
+      document.querySelector('form').submit();
+    }
+  
+    // Cerrar la ventana emergente después de 3 segundos
+    setTimeout(() => {
+      swal.close();
+    }, 150000); // 3000 milisegundos (3 segundos)
+  });
+  </script>
+  
 
 </body>
 </html>
