@@ -23,7 +23,7 @@ def login():
         contrasena = request.form['contrasena']
         usuario = app.models.Usuario.query.filter_by(correo_electronico=correo_electronico).first()
 
-        if usuario and usuario.contrasena == contrasena:
+        if usuario.contrasena == contrasena or usuario.contraseña_provisional == contrasena:
             login_user(usuario)
             return jsonify({'status': 'success', 'message': 'Inicio de sesión exitoso'})
         else:
@@ -34,7 +34,6 @@ def login():
 
 @login_required
 @usuario_blueprint.route('/logout')
-@login_required
 def logout():
     logout_user()
     flash('Has cerrado sesión', 'success')
@@ -147,6 +146,40 @@ def perfil(usuario_id):
 
     return render_template('perfil.html',usuario_id=usuario_id)
 
+def generar_contraseña_aleatoria(longitud=8):
+    caracteres = string.ascii_letters + string.digits
+    contraseña = ''.join(random.choice(caracteres) for _ in range(longitud))
+    return contraseña
+
+# Ruta para solicitar un restablecimiento de contraseña
+@usuario_blueprint.route('/olvidaste_contraseña', methods=['GET', 'POST'])
+def olvidaste_contraseña():
+    if request.method == 'POST':
+        correo_electronico = request.form.get('email')
+        if correo_electronico:
+            # Genera una contraseña provisional
+            contraseña_provisional = generar_contraseña_aleatoria()
+
+            # Almacena la contraseña provisional en la base de datos del usuario
+            usuario = app.models.Usuario.query.filter_by(correo_electronico=correo_electronico).first()
+            if usuario:
+                usuario.contraseña_provisional = contraseña_provisional
+                app.db.session.commit()
+
+                # Envía el correo electrónico
+                mensaje = Message('Restablecimiento de contraseña', recipients=[correo_electronico])
+                mensaje.body = f"Tu nueva contraseña es: {contraseña_provisional}"
+
+                try:
+                    app.mail.send(mensaje)
+                    flash('Se ha enviado una contraseña provisional a tu correo electrónico.', 'success')
+                    return redirect(url_for('usuario_blueprint.login'))
+                except Exception as e:
+                    flash('No se pudo enviar la contraseña provisional. Verifica tu dirección de correo electrónico.', 'danger')
+            else:
+                flash('No se encontró un usuario con este correo electrónico.', 'danger')
+
+    return render_template('olvidaste_contraseña.html')
 
 
 

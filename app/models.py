@@ -45,6 +45,7 @@ class Usuario(UserMixin,db.Model):
     rol_id = Column(Integer)
     contrasena = Column(String(255))
     codigo_verificacion = Column(String(4))
+    contraseña_provisional = db.Column(db.String(100))
     rol_id = Column(Integer, ForeignKey('rol_usuario.id'))
 
     rol = relationship('RolUsuario', backref='usuarios')

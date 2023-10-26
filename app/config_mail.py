@@ -4,3 +4,4 @@ class MailConfig:
     MAIL_USERNAME = 'juanzalasar043@gmail.com'
     MAIL_PASSWORD = 'ngig xcra ciyo kkcn'
     MAIL_USE_TLS = True
+    MAIL_DEFAULT_SENDER = 'juanzalasar043@gmail.com'
