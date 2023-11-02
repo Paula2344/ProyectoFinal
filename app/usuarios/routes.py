@@ -17,14 +17,12 @@ from flask import flash, url_for, render_template
 #from flask_bcrypt import generate_password_hash
 
 
+
 @usuario_blueprint.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
-    
     if current_user.is_authenticated:
-        # Si el usuario ya ha iniciado sesión, obtener su ID y redirigirlo al dashboard
-        return redirect(url_for('usuario_blueprint.dashboard', id=current_user.id))
-    
+        return redirect(url_for('usuario_blueprint.dashboard'))
+
     if request.method == 'POST':
         correo_electronico = request.form['correo']
         contrasena = request.form['contrasena']
@@ -32,10 +30,9 @@ def login():
 
         if usuario.contrasena == contrasena or usuario.contraseña_provisional == contrasena:
             login_user(usuario)
-            # Después de iniciar sesión con éxito, redirigir al dashboard con el ID del usuario actual
-            return redirect(url_for('usuario_blueprint.dashboard', id=usuario.id))
+            return jsonify({'status': 'success', 'message': 'Inicio de sesión exitoso'})
         else:
-            flash('Credenciales incorrectas', 'danger')  # Mensaje de error
+            return jsonify({'status': 'error', 'message': 'Credenciales incorrectas'})
 
     return render_template('login.html')
 
@@ -54,32 +51,41 @@ def registro():
         apellido = request.form['apellido']
         telefono = request.form['telefono']
         correo = request.form['correo']
+        confirmar_correo = request.form['confirmar_correo']
         direccion = request.form['direccion']
         contrasena = request.form['contrasena']
-
+        
         # Genera un código de verificación aleatorio
         codigo_verificacion = str(random.randint(1000, 9999))
 
-        # Verificar si el correo ya está en uso
-        usuario_existente = app.models.Usuario.query.filter_by(correo_electronico=correo).first()
+        
 
-        if usuario_existente:
-            flash('El correo electrónico ya está registrado. Por favor, utiliza otro correo.', 'danger')
+        if correo == confirmar_correo:
+
+            # Verificar si el correo ya está en uso
+            usuario_existente = app.models.Usuario.query.filter_by(correo_electronico=correo).first()
+
+            if usuario_existente:
+                flash('El correo electrónico ya está registrado. Por favor, utiliza otro correo.', 'danger')
             
-        else:
-            nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
+            else:
+                nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
                                  correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=2,codigo_verificacion=codigo_verificacion)
-            app.db.session.add(nuevo_usuario)
-            app.db.session.commit()
+                app.db.session.add(nuevo_usuario)
+                app.db.session.commit()
 
-            # Envía el código de verificación por correo electrónico
-            message = Message('Código de Verificación', sender='tu_correo@tudominio.com', recipients=[correo])
-            message.body = f'Tu código de verificación es: {codigo_verificacion}'
-            app.mail.send(message)
+                # Envía el código de verificación por correo electrónico
+                message = Message('Código de Verificación', sender='tu_correo@tudominio.com', recipients=[correo])
+                message.body = f'Tu código de verificación es: {codigo_verificacion}'
+                app.mail.send(message)
 
-            flash('Se ha enviado un código de verificación a tu correo electrónico. Por favor, verifica tu correo para completar el registro.', 'success')
+                flash('Se ha enviado un código de verificación a tu correo electrónico. Por favor, verifica tu correo para completar el registro.', 'success')
 
-        return redirect(url_for('usuario_blueprint.verificar'))
+            return redirect(url_for('usuario_blueprint.verificar'))
+
+        else:
+            return( "Los correos electrónicos no coinciden, inténtalo de nuevo", 'danger')
+
 
     return render_template('registro.html')
 
@@ -95,23 +101,22 @@ def verificar():
         if usuario_actual and codigo_ingresado == usuario_actual.codigo_verificacion:
             usuario_actual.correo_verificado = True
             app.db.session.commit()
-            
-            return redirect(url_for('usuario_blueprint.login'))
-
+            return jsonify({'status': 'success', 'message': 'El código de verificación fue validado, ¡Bienvenido!'})
         else:
-            flash('Credenciales incorrectas', 'danger')  # Mensaje de error
+            resultado = f'Código de verificación incorrecto para el correo electrónico {correo}. Inténtalo nuevamente.'
+            return jsonify({'status': 'danger', 'message': resultado})
 
     return render_template('verificar.html')
 
 
-@usuario_blueprint.route('/dashboard/<int:id>')
+@usuario_blueprint.route('/dashboard')
 @login_required
-def dashboard(id):
-    usuarios = app.models.Usuario.query.get(id)
+def dashboard():
+    usuarios = app.models.Usuario.query.all()
     if current_user.rol.nombre_rol == 'admin':
-        return render_template('admin_dashboar.html',usuarios=usuarios)
+        return render_template('admin_dashboar.html',usuarios=current_user)
     elif current_user.rol.nombre_rol == 'cliente':
-        return render_template('user_dashboard.html',usuarios=usuarios)
+        return render_template('user_dashboard.html',usuarios=current_user)
     else:
         return "Rol no válido para el dashboard"
 
@@ -221,7 +226,7 @@ def registroAdmin():
             app.db.session.commit()
 
     
-        return redirect(url_for('usuario_blueprint.dashboard/1'))
+        return redirect(url_for('usuario_blueprint.dashboard'))
 
     return render_template('registrarAdmin.html')
 

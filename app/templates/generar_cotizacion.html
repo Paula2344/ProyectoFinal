@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generar Cotización</title>
+</head>
+<body>
+    <h1>Generar Cotización</h1>
+
+    <form method="POST" action="{{ url_for('cotizacion_blueprint.generar_cotizacion', id=orden_servicio.id) }}">
+        <label for="nombre">Nombre:</label>
+        <input type="text" name="nombre" id="nombre" value="{{ orden_servicio.nombre }}" readonly>
+        <br>
+
+        <label for="telefono">Teléfono:</label>
+        <input type="text" name="telefono" id="telefono" value="{{ orden_servicio.telefono }}" readonly>
+        <br>
+
+        <label for="correo_electronico">Correo Electrónico:</label>
+        <input type="text" name="correo_electronico" id="correo_electronico" value="{{ orden_servicio.correo_electronico }}" readonly>
+        <br>
+
+        <!-- Agrega otros campos de la orden de servicio aquí -->
+
+        <label for="detallesAdicionales">Detalles Adicionales:</label>
+        <input type="text" name="detallesAdicionales" id="detallesAdicionales" value="{{ orden_servicio.detallesAdicionales }}" readonly>
+        <br>
+
+        <label for="materialFk">Seleccionar un material:</label>
+        <select id="materialFk" name="materialFk">
+            <option value="">Seleccionar...</option>
+            {% for Mat in materialFk %}
+                <option value="{{ Mat.id }}">{{ Mat.nombre_material }} (color: {{ Mat.color }})</option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <button type="submit">Enviar Cotización por Correo</button>
+    </form>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul class="flash-messages">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+</body>
+</html>
