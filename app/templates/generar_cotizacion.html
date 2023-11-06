@@ -1,41 +1,173 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">"
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">"
     <title>Generar Cotización</title>
 </head>
 <body>
-    <h1>Generar Cotización</h1>
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <div class="logo">
+                          <img src="{{url_for('static',filename='images/logoE.png')}}">
+                            </div>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
+                            <li class="submenu">
+                              <a href="javascript:;">¿Que deseas hacer?</a>
+                              <ul>
+                                  <li><a href="/materiales/agregar" class="submenu">
+                                    <p> Agregar material</p>
+                                    <li><a href="/materiales/listar" class="submenu">
+                                        <p> Consultar material </p>
+                                  <li><a href="/materiales/listar" class="submenu">
+                                    <p> Actualizar material </p>
+                                    <li><a href="/materiales/listar" class="submenu">
+                                        <p> Eliminar material </p>
+                                    <li><a href="/usuarios/dashboard " class="submenu">
+                                          <p> Volver al menu  </p>
+                                    </a></li>
+                                </ul>
+                          </li>
+                      </ul>        
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header><br>
+    <br>
+    <br>
+    <section class="h-100 gradient-form" style="background-color: #eee;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+              <div class="card rounded-3 text-black">
+                <div class="row g-0">
+                  <div class="col-lg-6">
+                    <div class="card-body p-md-5 mx-md-4">
+      
+                      <div class="text-center">
+      
+                        <h4 class="mt-1 mb-5 pb-1">Generar Cotización</h4>
+                      </div>
 
     <form method="POST" action="{{ url_for('cotizacion_blueprint.generar_cotizacion', id=orden_servicio.id) }}">
+        <div class="form-outline mb-4">
         <label for="nombre">Nombre:</label>
         <input type="text" name="nombre" id="nombre" value="{{ orden_servicio.nombre }}" readonly>
         <br>
+        </div>
 
+        <div class="form-outline mb-4">
         <label for="telefono">Teléfono:</label>
         <input type="text" name="telefono" id="telefono" value="{{ orden_servicio.telefono }}" readonly>
         <br>
+        </div>
 
+        <div class="form-outline mb-4">
         <label for="correo_electronico">Correo Electrónico:</label>
         <input type="text" name="correo_electronico" id="correo_electronico" value="{{ orden_servicio.correo_electronico }}" readonly>
         <br>
-
+        </div>
         <!-- Agrega otros campos de la orden de servicio aquí -->
-
+        <div class="form-outline mb-4">
         <label for="detallesAdicionales">Detalles Adicionales:</label>
         <input type="text" name="detallesAdicionales" id="detallesAdicionales" value="{{ orden_servicio.detallesAdicionales }}" readonly>
         <br>
+        </div>
 
-        <label for="materialFk">Seleccionar un material:</label>
-        <select id="materialFk" name="materialFk">
-            <option value="">Seleccionar...</option>
-            {% for Mat in materialFk %}
-                <option value="{{ Mat.id }}">{{ Mat.nombre_material }} (color: {{ Mat.color }})</option>
-            {% endfor %}
-        </select>
+        <div class="form-outline mb-4">
+            <label for="materialFk" >Seleccionar un material:</label>
+            <select id="materialFk" name="materialFk">
+                <option value="">Seleccionar...</option>
+                {% for material in materiales %}
+                    <option value="{{ material.id }}">{{ material.nombre_material }} - Color: {{ material.color }} </option>
+                {% endfor %}
+            </select>
+        </div>
+
+    <div class="form-outline mb-4">
+        <label for="tipoServicio">Tipo de Servicio:</label>
+        <input type="text" name="tipoServicio" id="tipoServicio" value="{{ orden_servicio.tipoServicio }}" readonly>
         <br>
+    </div>
 
-        <button type="submit">Enviar Cotización por Correo</button>
+        <div class="form-outline mb-4">
+        <label for="incluye">Que incluye el servicio:</label>
+        <input type="text" id="incluye" name="incluye" class="form-control" placeholder="¿Qué incluye?" required/>
+        <br>
+    </div>
+
+
+        <div class="form-outline mb-4">
+        <label for="precioTotal">Precio total:</label>
+        <input type="number" id="precioTotal" name="precioTotal" class="form-control" placeholder="Precio Total" required/>
+        <br>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center pb-4">
+      <button id="enviar-cotizacion" class="btn btn-primary">Enviar Cotización</button>
+      <a class="cancelar" href="/usuarios/dashboard">Cancelar</a>
+      </div>
+     
+
+</div>
+</div>
+<div class="col-lg-6 d-flex align-items-center derecha">
+<div class="text-white px-3 py-4 p-md-5 mx-md-4">
+  <img src="{{url_for('static',filename='images/logo5.png')}}">
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
     </form>
+
+    <footer class="site-footer">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 col-sm-6 col-xs-12">
+              <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
+              </p>
+            </div>
+      
+            <div class="col-md-4 col-sm-6 col-xs-12">
+              <ul class="social-icons">
+                <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
+                <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
+              </ul>
+            </div>
+          </div>
+        </div>
+      </footer>
+      
+      <script>
+    {% if correo_enviado %}
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            Swal.fire('¡Éxito!', 'Cotización enviada por correo', 'success').then(function() {
+                window.location.href = '{{ url_for("cotizacion_blueprint.generar_cotizacion", id=orden_servicio.id) }}';
+            });
+        </script>
+    {% endif %}
 
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -46,5 +178,71 @@
             </ul>
         {% endif %}
     {% endwith %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          // Selector del botón "Enviar Cotización"
+          const enviarCotizacionButton = document.getElementById('enviar-cotizacion');
+      
+          // Agregar un manejador de eventos al botón
+          enviarCotizacionButton.addEventListener('click', function() {
+              // Mostrar la ventana emergente SweetAlert
+              Swal.fire({
+                  title: '¿Estás seguro de enviar la cotización?',
+                  text: 'Una vez enviada, no se puede deshacer esta acción.',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonText: 'Sí, enviar',
+                  cancelButtonText: 'Cancelar'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      // Si el usuario confirma, puedes realizar una solicitud AJAX para enviar la cotización al servidor.
+                      // Aquí, te proporciono un ejemplo genérico de cómo podrías hacerlo:
+      
+                      // Obtener los datos del formulario (debes ajustar esto según tu estructura de datos)
+                      const nombre = document.getElementById('nombre').value;
+                      const telefono = document.getElementById('telefono').value;
+                      const correo_electronico = document.getElementById('correo_electronico').value;
+                      const detallesAdicionales = document.getElementById('detallesAdicionales').value;
+                      const materialFk = document.getElementById('materialFk').value;
+                      const tipoServicio = document.getElementById('tipoServicio').value;
+                      const incluye = document.getElementById('incluye').value;
+                      const precioTotal = document.getElementById('precioTotal').value;
+      
+                      // Crear un objeto con los datos a enviar
+                      const cotizacionData = {
+                          nombre,
+                          telefono,
+                          correo_electronico,
+                          detallesAdicionales,
+                          materialFk,
+                          tipoServicio,
+                          incluye,
+                          precioTotal,
+                      };
+      
+                      // Realizar una solicitud AJAX al servidor (ajusta la URL y el método según tu backend)
+                      fetch('/tu_ruta_de_backend', {
+                          method: 'POST',
+                          headers: {
+                              'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify(cotizacionData),
+                      })
+                      .then(response => response.json())
+                      .then(data => {
+                          // Manejar la respuesta del servidor, por ejemplo, mostrar una notificación de éxito
+                          Swal.fire('Cotización enviada', 'La cotización ha sido enviada con éxito.', 'success');
+                      })
+                      .catch(error => {
+                          // Manejar errores, por ejemplo, mostrar una notificación de error
+                          Swal.fire('Error', 'Hubo un error al enviar la cotización.', 'error');
+                      });
+                  }
+              });
+          });
+      });
+      </script>
+      
+      
 </body>
 </html>

@@ -54,38 +54,34 @@ def registro():
         confirmar_correo = request.form['confirmar_correo']
         direccion = request.form['direccion']
         contrasena = request.form['contrasena']
-        
+
         # Genera un código de verificación aleatorio
         codigo_verificacion = str(random.randint(1000, 9999))
 
-        
+        # Verificar si el correo ya está en uso
+        usuario_existente = app.models.Usuario.query.filter_by(correo_electronico=correo).first()
 
-        if correo == confirmar_correo:
+        if usuario_existente:
+            mensaje = 'El correo que intentas registrar ya está registrado por otro usuario, intenta de nuevo con otra dirección de correo'
+            return jsonify({'status': 'danger', 'message': mensaje})
 
-            # Verificar si el correo ya está en uso
-            usuario_existente = app.models.Usuario.query.filter_by(correo_electronico=correo).first()
-
-            if usuario_existente:
-                flash('El correo electrónico ya está registrado. Por favor, utiliza otro correo.', 'danger')
-            
-            else:
-                nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
-                                 correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=2,codigo_verificacion=codigo_verificacion)
-                app.db.session.add(nuevo_usuario)
-                app.db.session.commit()
-
-                # Envía el código de verificación por correo electrónico
-                message = Message('Código de Verificación', sender='tu_correo@tudominio.com', recipients=[correo])
-                message.body = f'Tu código de verificación es: {codigo_verificacion}'
-                app.mail.send(message)
-
-                flash('Se ha enviado un código de verificación a tu correo electrónico. Por favor, verifica tu correo para completar el registro.', 'success')
-
-            return redirect(url_for('usuario_blueprint.verificar'))
+        elif correo != confirmar_correo:
+            mensaje = 'Los correos electrónicos no coinciden, revísalos y vuelve a intentar'
+            return jsonify({'status': 'danger', 'message': mensaje})
 
         else:
-            return( "Los correos electrónicos no coinciden, inténtalo de nuevo", 'danger')
+            nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
+                                               correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=2, codigo_verificacion=codigo_verificacion)
+            app.db.session.add(nuevo_usuario)
+            app.db.session.commit()
 
+            # Envía el código de verificación por correo electrónico
+            message = Message('Código de Verificación', sender='tu_correo@tudominio.com', recipients=[correo])
+            message.body = f'Tu código de verificación es: {codigo_verificacion}'
+            app.mail.send(message)
+
+            mensaje = '¡Registro exitoso! Tu código de verificación ha sido enviado a tu correo electrónico.'
+            return jsonify({'status': 'success', 'message': mensaje})
 
     return render_template('registro.html')
 

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ruta protegida</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    // Agregar una función para mostrar la alerta SweetAlert en caso de error
+    function showAlert(response) {
+        if (response.status === 'error') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Acceso denegado',
+                text: response.message
+            });
+        }
+    }
+</script>
+<script>
+    // Llama a la función showAlert con la respuesta JSON
+    showAlert({{ response | tojson | safe }});
+</script>
+
+</body>
+</html>

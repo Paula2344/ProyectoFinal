@@ -1,75 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Verificar Código de Verificación</title>
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/verificar.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="website icon" type="png" href="{{url_for('static',filename='assets/img/logoE.png')}}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/estilo.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/templatemo-hexashop.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/footer.css') }}">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <title>Verificacion de correo</title>
+    </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-6 col-sm-offset-2">
-                <h1>Check your email!</h1>
-                <p class="desc">We’ve sent a four-digit confirmation code. Enter it below to confirm your email address.</p>
-                <br><br><br>
-                <label><span class="normal">Your </span>confirmation code</label>
-                <form method="POST" id="verificationForm">
-                    <label for="correo">Correo:</label>
+    <div class="wrapper bg-white">
+        <div class="h2 text-center"><img src="{{url_for('static',filename='images/logoE.png')}}"></div>
+        <div class="h4 text-muted text-center pt-2">Verificacion de correo</div>
+        <h5>Hemos enviado un codigo de verificacion a su correo</h5>
+        <form class="pt-3" method="POST">
+            <div class="form-group py-2">
+                <label for="correo">Correo:</label>
+                <div class="input-field">
                     <input type="email" name="correo" placeholder="Correo" autocomplete="off" required><br>
-                    <label for="codigo_verificacion">Código de Verificación:</label>
+                    <span class="far fa-user p-2"></span>
+                </div>
+            </div>
+            <div class="form-group py-1 pb-2">
+                <label for="codigo_verificacion">Código de Verificación:</label>
+                <div class="input-field">
                     <input type="number" name="codigo_verificacion" placeholder="Código de Verificación" autocomplete="off" required><br>
-
-                    <button type="button" class="btn btn-primary" id="verificarButton">Verificar</button>
-                </form>
-            </div><!-- end of col -->
-        </div>
+                    <span class="fas fa-lock p-2"></span>
+                    <button class="btn bg-white text-muted">
+                    <span class="far fa-eye-slash"></span>
+                    </button>
+                </div>
+                
+                <div class="d-flex align-items-start"></div>
+                <center><button type="button" class="btn btn-block text-center my-3" id="verificarButton" value="Verificar">Verificar</button></center>
+            </div>
+        </form>
     </div>
 
 
-
-<script>
-document.getElementById("verificarButton").addEventListener("click", function () {
-    var correo = document.querySelector('input[name="correo"]').value;
-    var codigo_verificacion = document.querySelector('input[name="codigo_verificacion"]').value;
-
-    // Realizar una solicitud AJAX al servidor para verificar el código
-    $.ajax({
-        type: 'POST',
-        url: 'verificar',  // Asegúrate de que la URL sea correcta para tu aplicación
-        data: {
-            correo: correo,
-            codigo_verificacion: codigo_verificacion
-        },
-        success: function (response) {
-            Swal.fire({
-                title: "Resultado de la verificación",
-                text: response.message,
-                icon: response.status === 'success' ? "success" : "error",
-                timer: 10000, // Muestra la ventana emergente durante 10 segundos
-                showConfirmButton: false, // Evita que se cierre al hacer clic
+    <script>
+        document.getElementById("verificarButton").addEventListener("click", function () {
+            var correo = document.querySelector('input[name="correo"]').value;
+            var codigo_verificacion = document.querySelector('input[name="codigo_verificacion"]').value;
+    
+            // Realizar una solicitud AJAX al servidor para verificar el código
+            $.ajax({
+                type: 'POST',
+                url: 'verificar',  // Asegúrate de que la URL sea correcta para tu aplicación
+                data: {
+                    correo: correo,
+                    codigo_verificacion: codigo_verificacion
+                },
+                success: function (response) {
+                    Swal.fire({
+                        title: "Resultado de la verificación",
+                        text: response.message,
+                        icon: response.status === 'success' ? "success" : "error",
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "OK"
+                    }).then((result) => {
+                        if (response.status === 'success') {
+                            window.location.href = "{{ url_for('usuario_blueprint.login') }}";
+                        }
+                    });
+                },
+                error: function (error) {
+                    Swal.fire({
+                        title: "Error",
+                        text: "Hubo un error en la solicitud.",
+                        icon: "error",
+                    });
+                }
             });
-
-            // Redirigir a la página de inicio de sesión si la verificación fue exitosa
-            if (response.status === 'success') {
-                // Ajusta la URL de redirección según tu aplicación
-                window.location.href = "{{ url_for('usuario_blueprint.login') }}";
-            }
-        },
-        error: function (error) {
-            Swal.fire({
-                title: "Error",
-                text: "Hubo un error en la solicitud.",
-                icon: "error",
-            });
-        }
-    });
-});
-</script>
+        });
+    </script>
 </body>
 </html>

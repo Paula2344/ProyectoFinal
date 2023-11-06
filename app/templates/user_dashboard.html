@@ -1,99 +1,227 @@
 <!DOCTYPE html>
-<html lang="es">
-<head> 
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tapiplas</title>
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/style2.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/templatemo-hexashop.css')}}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>Tapiplas</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link rel="website icon" type="png" href="{{url_for('static',filename='assets/img/logoE.png')}}">
+
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/vendor/aos/aos.min')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/vendor/bootstrap/css/bootstrap.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/vendor/bootstrap-icons/bootstrap-icons.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/vendor/boxicons/css/boxicons.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/vendor/glightbox/css/glightbox.min.css')}}">
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.css')}}">
+
+  <!-- Template Main CSS File -->
+  <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='assets/css/estiloU.css')}}">
+
+  
+
 </head>
+
 <body>
 
-<header class="header-area header-sticky">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <img src="{{url_for('static',filename='images/logoE.png')}}"> Bienvenido cliente
-                        
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav">
-                            <li class="scroll-to-section"><a href="#" id="logout-link">Cerrar sesión</a></li>
-                            <li class="scroll-to-section"><a href="/ordenes/mostrar/{{usuarios.id}}">Ver mis ordenes de servicio</a></li>
-                            <li class="scroll-to-section"><a href="/ordenes/agregar/{{usuarios.id}}">Realizar cotizacion</a></li>
-                            <li class="scroll-to-section"><a href="/usuarios/perfil/{{ usuarios.id }}">Ver perfil</a></li>
-                            <!-- ***** Menu End ***** -->
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
 
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    
-    <footer class="site-footer">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 col-sm-6 col-xs-12">
-              <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
-              </p>
-            </div>
-  
-            <div class="col-md-4 col-sm-6 col-xs-12">
-              <ul class="social-icons">
-                <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
-                <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
-              </ul>
-            </div>
+
+  <!-- ======= Header ======= -->
+  <header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center justify-content-between">
+
+      <a href="/"><img src="{{url_for('static',filename='assets/img/logoE.png')}}"></a>
+      <!-- Uncomment below if you prefer to use an image logo -->
+      <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt=""></a>-->
+        
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a class="nav-link scrollto active" href="#hero">Inicio</a></li>
+          <li><a class="nav-link scrollto" href="#portfolio">Materiales</a></li>
+          <li class="scroll-to-section"><a href="/ordenes/mostrar/{{usuarios.id}}">Ver mis ordenes de servicio</a></li>
+          <li class="scroll-to-section"><a href="/usuarios/perfil/{{ usuarios.id }}">Ver perfil</a></li>
+          <li class="scroll-to-section"><a href="#" id="logout-link">Cerrar sesión</a></li>
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+
+    </div>
+  </header><!-- End Header -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+  <script>
+      // Agrega un evento clic al enlace "Cerrar sesión"
+      document.getElementById('logout-link').addEventListener('click', function (event) {
+          event.preventDefault();
+          Swal.fire({
+              title: 'Cerrar Sesión',
+              text: '¿Estás seguro de que deseas cerrar sesión?',
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonText: 'Sí',
+              cancelButtonText: 'No',
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Redirige al usuario a la ruta de logout si confirma
+                  window.location.href = "{{ url_for('usuario_blueprint.logout') }}";
+              }
+          });
+      });
+  </script>
+
+  <!-- ======= Hero Section ======= -->
+  <section id="hero" class="d-flex align-items-center">
+    <div class="container" data-aos="zoom-out" data-aos-delay="100">
+      <h1>Bienvenido {{usuarios.nombre}} a  <span>Tapiplas</span></h1>
+      <h2>Aqui podras encontrar los mejores tapizados al mejor precio</h2>
+      <div class="d-flex">
+        <a href="/ordenes/agregar/{{usuarios.id}}" class="btn-get-started scrollto">Cotiza ahora aqui</a>
+      </div>
+    </div>
+  </section><!-- End Hero -->
+    <!-- ======= Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-title">
+          <h2>Materiales</h2>
+          <h3>Estos son algunos de nuestros<span> materiales</span></h3>
+          <p>Los materiales que ves a continuacion son algunos de los mas pedidos por nuestros clientes para tapizar sus productos</p>
+        </div>
+
+        <div class="row" data-aos="fade-up" data-aos-delay="100">
+          <div class="col-lg-12 d-flex justify-content-center">
+            <ul id="portfolio-flters">
+              <li data-filter="*" class="filter-active">Todos</li>
+              <li data-filter=".filter-app">Algodon</li>
+              <li data-filter=".filter-card">Cuero</li>
+              <li data-filter=".filter-web">Terciopelo</li>
+            </ul>
           </div>
         </div>
-  </footer>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
-    <script>
-        // Agrega un evento clic al enlace "Cerrar sesión"
-        document.getElementById('logout-link').addEventListener('click', function (event) {
-            event.preventDefault();
-            Swal.fire({
-                title: 'Cerrar Sesión',
-                text: '¿Estás seguro de que deseas cerrar sesión?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Sí',
-                cancelButtonText: 'No',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Redirige al usuario a la ruta de logout si confirma
-                    window.location.href = "{{ url_for('usuario_blueprint.logout') }}";
-                }
-            });
-        });
-    </script>
-    
+
+        <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <img src="{{url_for('static',filename='assets/img/portfolio/algodonI.jpg')}}"  class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Algodón Indio</h4>
+              <p>$29.900 x m² </p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/algodonI.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Algodón Indio"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <img src="{{url_for('static',filename='assets/img/portfolio/terciopeloA.jpg')}}" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Terciopelo de Algodón</h4>
+              <p>$79.200 x m²</p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/terciopeloA.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Algodón Americano"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <img src="{{url_for('static',filename='assets/img/portfolio/algodonA.jpg')}}" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Algodón Americano</h4>
+              <p>$79.200 x m²</p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/algodonA.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Algodón Americano"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <img src="{{url_for('static',filename='assets/img/portfolio/cueroL.jpg')}}" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Cuero Legitimo</h4>
+              <p>$620.000 x m²</p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/cueroL.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Cuero Legitimo"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
+            <img src="{{url_for('static',filename='assets/img/portfolio/lyon.jpg')}}" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Terciopelo Lyon</h4>
+              <p>$52.000 x m²</p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/lyon.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Terciopelo Lyon"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
+            <img src="{{url_for('static',filename='assets/img/portfolio/AlEspiga.jpg')}}" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Algodón Espiga</h4>
+              <p>$10.500 x m²</p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/AlEspiga.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Algodón Espiga"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <img src="{{url_for('static',filename='assets/img/portfolio/cueroS.jpg')}}" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Cuero Sintetico</h4>
+              <p>$20.700 x m²</p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/cueroS.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Card 1"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-6 portfolio-item filter-card">
+            <img src="{{url_for('static',filename='assets/img/portfolio/nobuck.jpg')}}" class="img-fluid" alt="">
+            <div class="portfolio-info">
+              <h4>Cuero Nobuck</h4>
+              <p>$50.200 x m²</p>
+              <a href="{{url_for('static',filename='assets/img/portfolio/nobuck.jpg')}}" data-gallery="portfolioGallery" class="portfolio-lightbox preview-link" title="Cuero nobuck"><i class="bx bx-plus"></i></a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section><!-- End Portfolio Section -->
+
+    <!-- ======= Contact Section ======= -->
+
+
+  </main><!-- End #main -->
+
+  <!-- ======= Footer ======= -->
+  <footer id="footer">
+    <div class="container py-4">
+      <div class="copyright">
+        &copy; Copyright <strong><span>Tapiplas</span></strong>. Derechos de autor reservados
+      </div>
+      <div class="credits">
+        
+      </div>
+    </div>
+  </footer><!-- End Footer -->
+
+  <div id="preloader"></div>
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  <!-- Vendor JS Files -->
+  <script src=" {{url_for('static',filename='assets/vendor/purecounter/purecounter_vainilla.js')}}"></script>
+  <script src=" {{url_for('static',filename='assets/vendor/aos/aos.js')}}"></script>
+  <script src=" {{url_for('static',filename='assets/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
+  <script src=" {{url_for('static',filename='assets/vendor/glightbox/js/glightbox.min.js')}}"></script>
+  <script src=" {{url_for('static',filename='assets/vendor/isotope-layout/isotope.pkgd.min.js')}}"></script>
+  <script src=" {{url_for('static',filename='assets/vendor/swiper/swiper-bundle.min.js')}}"></script>
+  <script src=" {{url_for('static',filename='assets/vendor/waypoints/noframework.waypoints.js')}}"></script>
+  <script src=" {{url_for('static',filename='assets/vendor/php-email-form/validate.js')}}"></script>
+
+  <!-- Template Main JS File -->
+  <script src=" {{url_for('static',filename='assets/js/main.js')}}"></script>
+
+
 </body>
+
 </html>

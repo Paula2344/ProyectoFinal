@@ -2,7 +2,7 @@ from datetime import datetime
 from flask import abort, redirect, render_template, request, url_for
 from . import ordenes_blueprint
 import app 
-
+from flask import jsonify
 import os
 from werkzeug.utils import secure_filename 
 from random import sample
@@ -25,7 +25,6 @@ def mostrar_registro(id):
 
 
 # Ruta para agregar una nueva orden de servicio (CREATE)
-
 @ordenes_blueprint.route('/agregar/<int:id>', methods=['GET', 'POST'])
 def agregar_orden(id):
     usuario = app.models.Usuario.query.get(id)
@@ -33,32 +32,40 @@ def agregar_orden(id):
         nombre = request.form['nombre']
         telefono = request.form['telefono']
         correo_electronico = request.form['correo_electronico']
-        materialFk =  request.form['materialFk']
-        if(request.files['imagen1'] !=''):
-            file     = request.files['imagen1'] #recibiendo el archivo
-            imagen_1 = recibeFoto(file)
-        if(request.files['imagen2'] !=''):
-            file     = request.files['imagen2'] #recibiendo el archivo
-            imagen_2 = recibeFoto(file)
-        if(request.files['imagen3'] !=''):
-            file     = request.files['imagen3'] #recibiendo el archivo
-            imagen_3 = recibeFoto(file)
+        materialFk = request.form['materialFk']
+        
+        # Lógica para manejar las imágenes
+        imagen_1 = None
+        imagen_2 = None
+        imagen_3 = None
+
+        if 'imagen1' in request.files and request.files['imagen1']:
+            imagen_1 = recibeFoto(request.files['imagen1'])
+        if 'imagen2' in request.files and request.files['imagen2']:
+            imagen_2 = recibeFoto(request.files['imagen2'])
+        if 'imagen3' in request.files and request.files['imagen3']:
+            imagen_3 = recibeFoto(request.files['imagen3'])
+
         tipoServicio = request.form['tipoServicio']
         detallesAdicionales = request.form['detallesAdicionales']
         usuario_id = usuario.id
-        orden = app.models.OrdenServicio(nombre=nombre, telefono=telefono, correo_electronico=correo_electronico,materialFk=materialFk,
-                                         imagen1=imagen_1,imagen2=imagen_2,imagen3=imagen_3,
-                                         tipoServicio=tipoServicio,detallesAdicionales=detallesAdicionales,usuario_id=usuario_id)
-    
-        
+
+        # Crea una instancia de la orden de servicio
+        orden = app.models.OrdenServicio(nombre=nombre, telefono=telefono, correo_electronico=correo_electronico,
+                                         materialFk=materialFk, imagen1=imagen_1, imagen2=imagen_2, imagen3=imagen_3,
+                                         tipoServicio=tipoServicio, detallesAdicionales=detallesAdicionales, usuario_id=usuario_id)
+
+        # Guarda la orden en la base de datos
         app.db.session.add(orden)
         app.db.session.commit()
-        
-        url = url_for('ordenes_blueprint.mostrar_registro', id=usuario.id)
-        return redirect(url)
-    materialFk =app.models.Material.query.all()
-    
+
+        # Envía una respuesta JSON de éxito
+        return jsonify({'status': 'success', 'message': 'La orden de servicio se ha registrado con éxito'})
+
+    # Maneja otros casos, como GET, si es necesario
+    materialFk = app.models.Material.query.all()
     return render_template('agregar_orden.html', usuario=usuario, materialFk=materialFk) 
+
 
 # Ruta para editar una orden de servicio (UPDATE)
 @ordenes_blueprint.route('/editar/<int:id>', methods=['GET', 'POST'])
