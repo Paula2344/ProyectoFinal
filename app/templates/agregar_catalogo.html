@@ -116,53 +116,31 @@
 </div>
 </div>
 </footer>
-
 <script>
-  // Agregar evento clic al botón de registro
-  document.querySelector('#btn-registrar').addEventListener('click', function() {
-    // Obtener los datos del catálogo
-    const nombreCatalogo = document.querySelector('[name="nombre_catalogo"]').value;
-    const imagenCatalogo = document.querySelector('[name="imagen_catalogo"]').files[0];
-    
-    // Mostrar una ventana emergente de confirmación
-    Swal.fire({
-      title: 'Confirmar Registro',
-      text: '¿Estás seguro de que deseas registrar este catálogo?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        if (result.isConfirmed) {
-          // Envía el formulario para guardar los cambios
-          document.querySelector("form").submit();
-      }
-        const formData = new FormData();
-        formData.append('nombre_catalogo', nombreCatalogo);
-        formData.append('imagen_catalogo', imagenCatalogo);
-        
-        fetch('/catalogo/agregar', {
-          method: 'POST',
-          body: formData,
-        }).then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              mostrarResultadoModal('Catálogo registrado con éxito');
-            } else {
-              mostrarResultadoModal('Error al registrar el catálogo');
-            }
+  document.addEventListener("DOMContentLoaded", function () {
+      const guardarCambiosButton = document.querySelector(".btn-outline-danger");
+      
+      guardarCambiosButton.addEventListener("click", function (event) {
+          event.preventDefault(); // Prevenir el comportamiento predeterminado del botón
+          
+          // Utiliza SweetAlert para mostrar la ventana emergente de confirmación
+          Swal.fire({
+              title: 'Guardar Cambios',
+              text: '¿Estás seguro de que deseas guardar el catalogo?',
+              icon: 'question',
+              showCancelButton: true,
+              confirmButtonText: 'Sí',
+              cancelButtonText: 'No',
+          }).then((result) => {
+              if (result.isConfirmed) {
+                  // Envía el formulario para guardar los cambios
+                  document.querySelector("form").submit();
+              }
           });
-      }
-    });
+      });
   });
-
-  function mostrarResultadoModal(mensaje) {
-    const resultadoMensajeElement = document.getElementById('resultadoMensaje');
-    resultadoMensajeElement.textContent = mensaje;
-    const resultadoModal = new bootstrap.Modal(document.getElementById('resultadoModal'));
-    resultadoModal.show();
-  }
 </script>
+
+
 </body>
 </html>

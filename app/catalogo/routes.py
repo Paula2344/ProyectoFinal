@@ -33,6 +33,7 @@ def agregar_catalogo():
             nuevoNombreFile = recibeFoto(file)
         catalogo = app.models.Catalogo(nombre_catalogo=nombre_catalogo, imagen_catalogo=nuevoNombreFile )
         
+        
         app.db.session.add(catalogo)
         app.db.session.commit()
         return redirect('/catalogo/listar')
@@ -61,7 +62,6 @@ def editar_catalogo(id):
 @catalogo_blueprint.route('/eliminar/<int:id>')
 def eliminar_catalgo(id):
     catalogo = app.models.Catalogo.query.get(id)
-    
     if catalogo:
         app.db.session.delete(catalogo)
         app.db.session.commit()

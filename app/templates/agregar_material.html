@@ -144,8 +144,9 @@
 </footer>
 
 <script>
-  // Agregar evento clic al botón de registro
-  document.querySelector('#btn-register').addEventListener('click', function() {
+  document.querySelector('#btn-register').addEventListener('click', function(event) {
+    event.preventDefault(); // Prevenir el comportamiento predeterminado del botón
+
     // Obtener los datos del material
     const nombre = document.getElementById('nombre').value;
     const descripcion = document.getElementById('descripcion').value;
@@ -153,38 +154,37 @@
     const cantidad_stock = document.getElementById('cantidad_stock').value;
     const unidad_medida = document.getElementById('unidad_medida').value;
     const color = document.getElementById('color').value;
-  
-    // Crear una ventana emergente
-    const swal = Swal.fire({
-      title: 'Registrar Material',
-      text: '¿Estás seguro de registrar este material?',
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sí',
-      cancelButtonText: 'No',
-      closeOnConfirm: false,
-      closeOnCancel: false,
-    });
-  
+
     // Validar los datos del material
     if (!nombre || !descripcion || !precio || !cantidad_stock || !unidad_medida || !color) {
-      // Mostrar un mensaje de error
-      swal.fire({
-        title: 'Error',
-        text: 'Todos los campos son obligatorios.',
-        icon: 'error',
+      // Mostrar un mensaje de advertencia
+      Swal.fire({
+        title: 'Advertencia',
+        text: 'Por favor, complete todos los campos antes de registrar el material.',
+        icon: 'warning',
       });
     } else {
-      // Enviar el formulario para registrar el material
-      document.querySelector('form').submit();
+      // Mostrar la ventana emergente de confirmación
+      Swal.fire({
+        title: 'Registrar Material',
+        text: '¿Estás seguro de registrar este material?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Sí',
+        cancelButtonText: 'No',
+        closeOnConfirm: false,
+        closeOnCancel: false,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Enviar el formulario para registrar el material
+          document.querySelector('form').submit();
+        }
+      });
     }
-  
-    // Cerrar la ventana emergente después de 3 segundos
-    setTimeout(() => {
-      swal.close();
-    }, 150000); // 3000 milisegundos (3 segundos)
   });
-  </script>
+</script>
+
+
   
 
 </body>

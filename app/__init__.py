@@ -52,12 +52,14 @@ login_manager.login_view = 'login'
 #crear el obejeto de migracion 
 migrate=Migrate(app,db)
 
+from .models import Catalogo, RolUsuario,Usuario,Material,Cotizacion,OrdenServicio
 @app.route('/')
 def index():
-    return render_template('index.html' )
+    catalogoFk = Catalogo.query.all()  # Accede a Catalogo directamente desde el objeto db
+    return render_template('index.html', catalogoFk=catalogoFk)
 
 
-from .models import RolUsuario,Usuario,Material,Cotizacion,OrdenServicio
+
 
 @login_manager.user_loader
 def load_user(user_id):

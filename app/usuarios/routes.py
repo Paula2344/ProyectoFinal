@@ -109,10 +109,11 @@ def verificar():
 @login_required
 def dashboard():
     usuarios = app.models.Usuario.query.all()
+    materialFk = app.models.Material.query.all()
     if current_user.rol.nombre_rol == 'admin':
-        return render_template('admin_dashboar.html',usuarios=current_user)
+        return render_template('admin_dashboar.html',materialFk=materialFk,usuarios=current_user)
     elif current_user.rol.nombre_rol == 'cliente':
-        return render_template('user_dashboard.html',usuarios=current_user)
+        return render_template('user_dashboard.html',materialFk=materialFk,usuarios=current_user)
     else:
         return "Rol no válido para el dashboard"
 

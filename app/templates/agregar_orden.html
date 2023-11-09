@@ -85,9 +85,9 @@
                     <label for="materialFk">Seleccionar un material:</label>
                     <select id="materialFk" name="materialFk">
                         <option value="">Seleccionar...</option>
-                        {% for Mat in materialFk %}
-                            <option value="{{ Mat.id }}">{{ Mat.nombre_material}}      color:{{ Mat.color}}</option>
-                        {% endfor %}
+                        {% for material in materiales %}
+                    <option value="{{ material.id }}" data-image="{{ url_for('static', filename='imagenes_material/' + material.imagen_material) }}" ></option>
+                {% endfor %}
                     </select>
 
                     <div class="form-outline mb-4">
@@ -162,6 +162,31 @@
   </div>
 </footer>
  
+
+    <!-- Agrega este código JavaScript a tu página -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const materialSelect = document.getElementById('materialFk');
+          const materiales = JSON.parse('{{ materiales | tojson | safe }}');
+  
+          // Recorre la lista de materiales y agrega las opciones al elemento select
+          materiales.forEach(function(material) {
+              const option = document.createElement('option');
+              option.value = material.id;
+              option.textContent = material.nombre_material + ' - Color: ' + material.color;
+  
+              // Crea un elemento de imagen y establece su atributo src
+              const img = document.createElement('img');
+              img.src = '{{ url_for("static", filename="imagenes_material/") }}' + material.imagen_material;
+              img.style.width = '20px'; // Ajusta el ancho de la imagen según sea necesario
+  
+              // Agrega la imagen como un elemento antes del texto de la opción
+              option.prepend(img);
+  
+              materialSelect.appendChild(option);
+          });
+      });
+  </script>
 
 </body>
 </html>
