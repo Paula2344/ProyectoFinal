@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,15 +8,18 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/estilo.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/templatemo-hexashop.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/footer.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Login</title>
 </head>
+
 <body>
     <div class="wrapper bg-white">
-        <div class="h2 text-center">Tapiplas</div>
+        <div class="h2 text-center"><img src="{{url_for('static',filename='images/logoE.png')}}"></div>
         <div class="h4 text-muted text-center pt-2">Ingrese sus datos de inicio de sesión</div>
         <h2>Iniciar Sesión</h2>
 
@@ -35,11 +39,13 @@
                     </button>
                 </div>
                 <div class="d-flex align-items-start">
-                    <div class="ml-auto"><a href="/usuarios/olvidaste_contraseña" id="forgot">¿Olvidaste tu contraseña?</a></div>
+                    <div class="ml-auto"><a class="cancelar" href="/usuarios/olvidaste_contraseña"id="forgot">¿Olvidaste tu contraseña?</a></div>
+                    <div class="ml-auto">¿No tienes una cuenta?<a class="cancelar" href="/usuarios/register"id="forgot">Registrate</a></div>
+                    
                 </div>
                 <div class="d-flex align-items-start"></div>
                 <input type="submit" class="btn btn-block text-center my-3" value="Iniciar Sesión">
-                <a href="/">Cancelar</a>
+                <a class="cancelar" href="/">Cancelar</a>
             </div>
         </form>
     </div>
@@ -52,8 +58,11 @@
                 </div>
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <ul class="social-icons">
-                        <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
-                        <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>
+                        <li><a class="facebook"
+                                href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i
+                                    class="fa fa-facebook"></i></a></li>
+                        <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -62,7 +71,7 @@
 
     <script>
         // JavaScript para cerrar automáticamente las ventanas emergentes después de unos segundos
-        setTimeout(function() {
+        setTimeout(function () {
             document.getElementById('success-alert').style.display = 'none';
             document.getElementById('error-alert').style.display = 'none';
         }, 5000);
@@ -91,4 +100,5 @@
         });
     </script>
 </body>
+
 </html>

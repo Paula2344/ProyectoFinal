@@ -71,7 +71,7 @@ def registro():
 
         else:
             nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
-                                               correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=2, codigo_verificacion=codigo_verificacion)
+                                               correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=1, codigo_verificacion=codigo_verificacion)
             app.db.session.add(nuevo_usuario)
             app.db.session.commit()
 

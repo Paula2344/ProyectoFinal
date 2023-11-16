@@ -18,7 +18,7 @@
   <header id="header" class="d-flex align-items-center">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo"><a href="index.html">Tapiplas<span>.</span></a></h1>
+      <h1 class="logo"><img src="{{url_for('static',filename='assets/img/logoE.png')}}"><a href="index.html">Tapiplas<span>.</span></a></h1>
       <!-- Uncomment below if you prefer to use an image logo -->
       <!-- <a href="index.html" class="logo"><img src="assets/img/logo.png" alt=""></a>-->
 
@@ -28,7 +28,7 @@
           <li><a class="nav-link scrollto" href="/usuarios/dashboard">Volver</a></li>
 
           
-          <li><a class="nav-link scrollto " href="/usuarios/logout">Cerrar sesión</a></li>
+          <li class="scroll-to-section"><a href="/usuarios/logout" id="logout-link">Cerrar sesión</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -120,23 +120,6 @@
 </script>
 
 
-    <footer class="site-footer">
-        <div class="container">
-          <div class="row">
-            <div class="col-md-8 col-sm-6 col-xs-12">
-              <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
-              </p>
-            </div>
-    
-            <div class="col-md-4 col-sm-6 col-xs-12">
-              <ul class="social-icons">
-                <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
-                <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
-              </ul>
-            </div>
-          </div>
-        </div>
-    </footer>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
 <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -158,5 +141,16 @@
         });
     });
 </script>
+
+<footer id="footer">
+  <div class="container py-4">
+    <div class="copyright">
+      &copy; Copyright <strong><span>Tapiplas</span></strong>. Derechos de autor reservados
+    </div>
+    <div class="credits">
+      
+    </div>
+  </div>
+</footer>
 </body>
 </html>
