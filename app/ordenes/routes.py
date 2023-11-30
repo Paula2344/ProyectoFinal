@@ -33,7 +33,7 @@ def agregar_orden(id):
         telefono = request.form['telefono']
         correo_electronico = request.form['correo_electronico']
         materialFk = request.form['materialFk']
-        
+
         # Lógica para manejar las imágenes
         imagen_1 = None
         imagen_2 = None
@@ -64,14 +64,16 @@ def agregar_orden(id):
 
     # Maneja otros casos, como GET, si es necesario
     materialFk = app.models.Material.query.all()
-    return render_template('agregar_orden.html', usuario=usuario, materialFk=materialFk) 
+    return render_template('agregar_orden.html', usuario=usuario, materialFk=materialFk)
+
+
 
 
 # Ruta para editar una orden de servicio (UPDATE)
 @ordenes_blueprint.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar_orden(id):
     orden = app.models.OrdenServicio.query.get(id)
-    
+    usuarios = app.models.Usuario.query.all()
     if request.method == 'POST':
         orden.nombre = request.form['nombre']
         orden.telefono = request.form['telefono']
@@ -91,22 +93,22 @@ def editar_orden(id):
         
         app.db.session.commit()
         
-        return redirect('/ordenes/listar')
+        return render_template('editar_orden.html', orden=orden, usuarios=usuarios)
     
-    usuarios = app.models.Usuario.query.all()
+    
     return render_template('editar_orden.html', orden=orden, usuarios=usuarios)
 
 # Ruta para eliminar una orden de servicio (DELETE)
 @ordenes_blueprint.route('/eliminar/<int:id>')
 def eliminar_orden(id):
     orden = app.models.OrdenServicio.query.get(id)
+    usuario = app.models.Usuario.query.all()
     
     if orden:
         app.db.session.delete(orden)
         app.db.session.commit()
     
-    return redirect('/ordenes/listar')
-
+    return render_template('listar_ordenesCliente.html', orden=orden, usuario=usuario) 
 
 
 

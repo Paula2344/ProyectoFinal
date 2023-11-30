@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="es">
 <head> 
     <meta charset="UTF-8">
@@ -8,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/estiloRM.css')}}">"
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">"
-    <title>Insertar orden de servicio</title>
+    <title>Insertar material</title>
 </head>
 <body>
 <header class="header-area header-sticky">
@@ -23,7 +22,7 @@
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
-                            <li class="scroll-to-section"><a href="/index">Cerrar sesion</a></li>
+                            <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
                             <li class="submenu">
                               <a href="javascript:;">¿Que deseas hacer?</a>
                               <ul>
@@ -85,9 +84,9 @@
                     <label for="materialFk">Seleccionar un material:</label>
                     <select id="materialFk" name="materialFk">
                         <option value="">Seleccionar...</option>
-                        {% for material in materiales %}
-                    <option value="{{ material.id }}" data-image="{{ url_for('static', filename='imagenes_material/' + material.imagen_material) }}" ></option>
-                {% endfor %}
+                        {% for Mat in materialFk %}
+                            <option value="{{ Mat.id }}">{{ Mat.nombre_material}}      color:{{ Mat.color}}</option>
+                        {% endfor %}
                     </select>
 
                     <div class="form-outline mb-4">
@@ -161,32 +160,24 @@
     </div>
   </div>
 </footer>
- 
-
-    <!-- Agrega este código JavaScript a tu página -->
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const materialSelect = document.getElementById('materialFk');
-          const materiales = JSON.parse('{{ materiales | tojson | safe }}');
-  
-          // Recorre la lista de materiales y agrega las opciones al elemento select
-          materiales.forEach(function(material) {
-              const option = document.createElement('option');
-              option.value = material.id;
-              option.textContent = material.nombre_material + ' - Color: ' + material.color;
-  
-              // Crea un elemento de imagen y establece su atributo src
-              const img = document.createElement('img');
-              img.src = '{{ url_for("static", filename="imagenes_material/") }}' + material.imagen_material;
-              img.style.width = '20px'; // Ajusta el ancho de la imagen según sea necesario
-  
-              // Agrega la imagen como un elemento antes del texto de la opción
-              option.prepend(img);
-  
-              materialSelect.appendChild(option);
+<script>
+  function mostrarAlerta(respuesta) {
+      if (respuesta.status === "success") {
+          Swal.fire({
+              icon: "success",
+              title: "Orden de servicio registrada",
+              text: respuesta.message
           });
-      });
+      } else if (respuesta.status === "error") {
+          Swal.fire({
+              icon: "error",
+              title: "Error al registrar la orden de servicio",
+              text: respuesta.message
+          });
+      }
+  }
   </script>
+  
 
 </body>
 </html>

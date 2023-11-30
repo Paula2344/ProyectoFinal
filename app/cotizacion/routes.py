@@ -1,13 +1,14 @@
 from flask import render_template, request, flash
 from flask_mail import Message
 from reportlab.lib.pagesizes import letter, landscape
+from reportlab.lib.utils import ImageReader
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib import colors
 from io import BytesIO
 import app
 from . import cotizacion_blueprint
-from reportlab.lib import colors
-
+from reportlab.platypus import PageTemplate, Frame, Image
 
 @cotizacion_blueprint.route('/generar_cotizacion/<int:id>', methods=['GET', 'POST'])
 def generar_cotizacion(id):
@@ -20,7 +21,7 @@ def generar_cotizacion(id):
     materiales = app.models.Material.query.all()
     correo_enviado = False  # Variable para indicar si se ha enviado el correo
     material = None
-    
+
     if request.method == 'POST':
         nombre = request.form.get('nombre')
         telefono = request.form.get('telefono')
@@ -28,7 +29,6 @@ def generar_cotizacion(id):
         detalles_adicionales = request.form.get('detallesAdicionales')
         materialFk = request.form.get('materialFk')
         tipoServicio = request.form.get('tipoServicio')
-        descripcion = request.form.get('descripcion')
         incluye = request.form.get('incluye')
         precioTotal = request.form.get('precioTotal')
 
@@ -42,20 +42,66 @@ def generar_cotizacion(id):
 
         # Crear un nuevo objeto PDF
         pdf_buffer = BytesIO()
-        doc = SimpleDocTemplate(pdf_buffer, pagesize=landscape(letter), leftMargin=50, rightMargin=50, topMargin=50, bottomMargin=50)
+        doc = SimpleDocTemplate(
+            pdf_buffer,
+            pagesize=landscape(letter),
+            leftMargin=50,
+            rightMargin=50,
+            topMargin=50,
+            bottomMargin=50
+        )
 
         # Crear un Story para agregar elementos al PDF
         story = []
 
-        # Estilo para el título de la cotización
-        estilos = getSampleStyleSheet()
-        estilo_titulo = estilos["Title"]
-        estilo_titulo.alignment = 1  # Centrar el título
-        story.append(Paragraph("<u>Cotización Tapiplas</u>", estilo_titulo))
+        # Agrega la imagen al inicio del PDF centrada
+        image_path = 'app/static/assets/img/title.png'
+        pdf_image = ImageReader(image_path)
+        image_width, image_height = pdf_image.getSize()
+
+        # Ajusta el tamaño de la imagen según tus preferencias
+        nuevo_ancho = 200
+        nueva_altura = 100
+
+        image = Image(image_path, width=nuevo_ancho, height=nueva_altura)
+
+        # Puedes ajustar la posición de la imagen si es necesario
+        image.drawHeight = nueva_altura
+        image.drawWidth = nuevo_ancho
+
+        story.append(Spacer(1, 12))  # Espacio en blanco
+        story.append(image)
         story.append(Spacer(1, 12))  # Espacio en blanco
 
-        # Crear una tabla para mostrar los datos
+
+        # Crear estilos de párrafo
+        estilo_izquierda = ParagraphStyle(
+            'izquierda',
+            parent=getSampleStyleSheet()['BodyText'],
+            fontSize=25,
+            textColor=colors.black,
+            fontName='Times-Bold',
+            leftIndent=50,
+            fontWeight='bold',
+            spaceAfter=5,
+            backColor=colors.white,
+        )
+
+        estilo_derecha = ParagraphStyle(
+            'derecha',
+            parent=getSampleStyleSheet()['BodyText'],
+            fontSize=25,
+            textColor=colors.black,
+            fontName='Times-Bold',
+            rightIndent=50,
+            fontWeight='bold',
+            spaceAfter=5,
+            backColor=colors.white,
+        )
+
+        # Agrega los datos como párrafos al Story con espaciadores horizontales
         data = [
+            ["Datos Solicitados", "Datos de la cotizacion"],
             ["Nombre:", nombre],
             ["Teléfono:", telefono],
             ["Correo Electrónico:", correo_electronico],
@@ -63,22 +109,28 @@ def generar_cotizacion(id):
             ["Material:", nombre_material],
             ["Tipo de Servicio:", tipoServicio],
             ["¿Qué incluye?:", incluye],
-            ["Precio Total:", precioTotal]
+            ["Precio Total:", precioTotal],
         ]
 
-        # Configurar la tabla
-        table = Table(data, colWidths=[120, 350], style=[('ALIGN', (0, 0), (0, -1), 'RIGHT'), ('ALIGN', (1, 0), (1, -1), 'LEFT')])
+        # Agrega la tabla al Story con fondo transparente
+        table = Table(data, colWidths=[200, 480], rowHeights=40)
         table.setStyle(TableStyle([
-            ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-            ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.gray),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.black),
             ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('ALIGN', (1, 0), (1, -1), 'RIGHT'), 
+            ('RIGHTPADDING', (1, 0), (1, -1), 25),
             ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-            ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-            ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ('GRID', (0, 0), (-1, -1), 1, colors.Color(1, 1, 1, alpha=0)),
         ]))
-
         story.append(table)
+
+        # Agrega la imagen de fondo a todas las páginas del PDF
+        image_path = 'app/static/assets/img/fondoPdf2.png'
+        pdf_image = ImageReader(image_path)
+        frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height, id='normal')
+        template = PageTemplate(id='test', frames=[frame], onPage=lambda canvas, doc, pdf_image=pdf_image: canvas.drawImage(pdf_image, 0, 0, width=doc.pagesize[0], height=doc.pagesize[1]))
+        doc.addPageTemplates([template])
 
         # Construir el PDF
         doc.build(story)

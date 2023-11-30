@@ -43,7 +43,6 @@ def logout():
     flash('Has cerrado sesión', 'success')
     return redirect(url_for('usuario_blueprint.login'))
 
-
 @usuario_blueprint.route('/register', methods=['GET', 'POST'])
 def registro():
     if request.method == 'POST':
@@ -55,6 +54,11 @@ def registro():
         direccion = request.form['direccion']
         contrasena = request.form['contrasena']
 
+        # Verificar la longitud y la presencia de al menos una letra mayúscula en la contraseña
+        if len(contrasena) < 6 or not any(c.isupper() for c in contrasena):
+            mensaje = 'La contraseña debe tener al menos 6 caracteres y contener al menos una letra mayúscula.'
+            return jsonify({'status': 'danger', 'message': mensaje})
+
         # Genera un código de verificación aleatorio
         codigo_verificacion = str(random.randint(1000, 9999))
 
@@ -62,16 +66,16 @@ def registro():
         usuario_existente = app.models.Usuario.query.filter_by(correo_electronico=correo).first()
 
         if usuario_existente:
-            mensaje = 'El correo que intentas registrar ya está registrado por otro usuario, intenta de nuevo con otra dirección de correo'
+            mensaje = 'El correo que intentas registrar ya está registrado por otro usuario, intenta de nuevo con otra dirección de correo.'
             return jsonify({'status': 'danger', 'message': mensaje})
 
         elif correo != confirmar_correo:
-            mensaje = 'Los correos electrónicos no coinciden, revísalos y vuelve a intentar'
+            mensaje = 'Los correos electrónicos no coinciden, revísalos y vuelve a intentar.'
             return jsonify({'status': 'danger', 'message': mensaje})
 
         else:
             nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
-                                               correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=1, codigo_verificacion=codigo_verificacion)
+                                               correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=2, codigo_verificacion=codigo_verificacion)
             app.db.session.add(nuevo_usuario)
             app.db.session.commit()
 
@@ -159,6 +163,37 @@ def perfil(id):
             return "error"
 
     return render_template('perfil.html',usuario=usuario)
+
+@usuario_blueprint.route('/perfil-actualizar/<int:id>', methods=['GET', 'POST'])
+def perfil_actualizar(id):
+    usuario = app.models.Usuario.query.get(id)
+
+    if request.method == 'POST':
+        nuevo_nombre = request.form['nombre']
+        nuevo_apellido = request.form['apellido']
+        nuevo_correo = request.form['correo']
+        nueva_direccion = request.form['direccion']
+        nueva_contrasena = request.form['contrasena']
+
+        # Verificar la longitud de la contraseña
+        if len(nueva_contrasena) < 6:
+            mensaje = 'La contraseña debe tener al menos 6 caracteres.'
+            return jsonify({'status': 'error', 'message': mensaje})
+
+        # Verificar la cantidad de mayúsculas en la contraseña
+        if sum(1 for c in nueva_contrasena if c.isupper()) < 2:
+            mensaje = 'La contraseña debe tener al menos dos mayúsculas.'
+            return jsonify({'status': 'error', 'message': mensaje})
+
+        # Resto de tu lógica para actualizar el perfil
+        resultado, mensaje = actualizar_perfil(id, nuevo_nombre, nuevo_apellido, nuevo_correo, nueva_direccion, nueva_contrasena)
+
+        if resultado:
+            return jsonify({'status': 'success', 'message': 'Información actualizada correctamente'})
+        else:
+            return jsonify({'status': 'error', 'message': 'Error al actualizar la información'})
+
+    return render_template('perfilActualizar.html', usuario=usuario)
 
 
 def generar_contraseña_aleatoria(longitud=8):

@@ -94,7 +94,7 @@
             <select id="materialFk" name="materialFk">
                 <option value="">Seleccionar...</option>
                 {% for material in materiales %}
-                    <option value="{{ material.id }}" data-image="{{ url_for('static', filename='imagenes_material/' + Mat.imagen_material) }}" >{{ material.nombre_material }} - Color: {{ material.color }}   </option>
+                    <option value="{{ material.id }}">{{ material.nombre_material }} - Color: {{ material.color }} </option>
                 {% endfor %}
             </select>
         </div>
@@ -158,27 +158,8 @@
           </div>
         </div>
       </footer>
-      <style>
-        select#materialFk {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-size: 20px;
-            background-position: 95% 50%;
-            background-repeat: no-repeat;
-        }
-    
-        select#materialFk option {
-            padding: 10px;
-        }
-    
-        select#materialFk option[data-image] {
-            padding-left: 20px;
-            background-image: url('{{ material.imagen_url }}');
-        }
-    </style>
-
-
+      
+      <script>
     {% if correo_enviado %}
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
