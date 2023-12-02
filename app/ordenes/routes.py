@@ -83,13 +83,13 @@ def editar_orden(id):
         flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
         return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     orden = app.models.OrdenServicio.query.get(id)
-    usuarios = app.models.Usuario.query.all()
+    usuario = app.models.Usuario.query.get(orden.usuario_id)
+
 
     if request.method == 'POST':
         orden.nombre = request.form['nombre']
         orden.telefono = request.form['telefono']
         orden.correo_electronico = request.form['correo_electronico']
-        orden.materialFk = request.form['materialFk']
         orden.tipoServicio = request.form['tipoServicio']
         orden.detallesAdicionales = request.form['detallesAdicionales']
 
@@ -111,22 +111,32 @@ def editar_orden(id):
 
         app.db.session.commit()
         # Envía una respuesta JSON de éxito
+    
+    return render_template('editar_orden.html', orden=orden, usuario=usuario)
 
-    return render_template('editar_orden.html', orden=orden, usuarios=usuarios)
 
+# Ruta para eliminar una orden de servicio (DELETE)
 # Ruta para eliminar una orden de servicio (DELETE)
 @ordenes_blueprint.route('/eliminar/<int:id>')
 def eliminar_orden(id):
     if not is_logged_in():
         flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
         return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
+
     orden = app.models.OrdenServicio.query.get(id)
-    usuario = app.models.Usuario.query.all()
 
     if orden:
-        app.db.session.delete(orden)
-        app.db.session.commit()
-        return render_template('listar_ordenesCliente.html', orden=orden, usuario=usuario)
+        usuario = app.models.Usuario.query.get(orden.usuario_id)  # Buscar el usuario asociado a la orden
+        if usuario:
+            app.db.session.delete(orden)
+            app.db.session.commit()
+
+            # Redirige a la página 'mostrar_registro' de la misma blueprint ('ordenes_blueprint')
+            return redirect(url_for('ordenes_blueprint.mostrar_registro', id=usuario.id))
+
+    # Maneja el caso en el que la orden no fue encontrada
+    flash('Error: La orden de servicio no fue encontrada.', 'error')
+    return render_template("error.html", message="Error: La orden de servicio no fue encontrada.")
 
 
 

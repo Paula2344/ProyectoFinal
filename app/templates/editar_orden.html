@@ -25,11 +25,26 @@
                         </div>
                         <!-- *** Logo End *** -->
                         <ul class="nav">
-                          <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
-                          <li class="scroll-to-section"><a href="/usuarios/dashboard">Volver al menu</a></li>
-                      </ul>        
-                      <!-- ***** Menu End ***** -->
-                  </nav>
+                            <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
+                            <li class="submenu">
+                                <a href="javascript:;">¿Que deseas hacer?</a>
+                                <ul>
+                                    <li><a href="/ordenes/agregar/{{ usuario.id }}" class="submenu">
+                                            <p> Cotizar</p>
+                                    <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
+                                            <p> Consultar ordenes </p>
+                                    <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
+                                            <p> Actualizar mi orden </p>
+                                    <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
+                                            <p> Eliminar orden </p>
+                                    <li><a href="/usuarios/dashboard" class="submenu">
+                                            <p> Volver al menu </p>
+                                        </a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
                 </div>
             </div>
         </div>
@@ -108,10 +123,10 @@
                                       </div>
 
                                         <div class="d-flex align-items-center justify-content-center pb-4">
-                                            <a class="cancelar" href="/ordenes/mostrar/{{orden.id}}">Volver a la
-                                                lista</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <a class="cancelar" href="/ordenes/mostrar/{{ usuario.id }}">Volver a la lista </a>
                                             <button type="button" class="btn btn-outline-danger"
                                                 id="btn-actualizar">Guardar cambios</button>
+                                                
                                         </div>
 
                                     </form>
@@ -158,7 +173,6 @@
             const nombre = document.getElementsByName('nombre')[0].value;
             const telefono = document.getElementsByName('telefono')[0].value;
             const correo_electronico = document.getElementsByName('correo_electronico')[0].value;
-            const materialFk = document.getElementsByName('materialFk')[0].value;
             const tipoServicio = document.getElementsByName('tipoServicio')[0].value;
             const detallesAdicionales = document.getElementsByName('detallesAdicionales')[0].value;
 
@@ -187,7 +201,6 @@
                     formData.append('nombre', nombre);
                     formData.append('telefono', telefono);
                     formData.append('correo_electronico', correo_electronico);
-                    formData.append('materialFk', materialFk);
                     formData.append('tipoServicio', tipoServicio);
                     formData.append('detallesAdicionales', detallesAdicionales);
 
