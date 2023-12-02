@@ -1,4 +1,4 @@
-from flask import redirect, render_template, request
+from flask import redirect, render_template, request,flash
 import app
 from app import config
 #from app.models import cataogo
@@ -8,11 +8,14 @@ from . import catalogo_blueprint
 import os
 from werkzeug.utils import secure_filename 
 from random import sample
-
+from app.utils import is_logged_in
 
 
 @catalogo_blueprint.route('/listar')
 def listar_catalogo():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: tienes que acceder al sistema para realizar esta acción.")
     catalogo = app.models.Catalogo.query.all()
     return render_template('listar_catalogo.html', catalogo=catalogo)
 
@@ -20,11 +23,17 @@ def listar_catalogo():
 
 @catalogo_blueprint.route('/registrar', methods=['GET','POST'])
 def addCatalogo():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: tienes que acceder al sistema para realizar esta acción.")
     return render_template('agregar_catalogo.html')
 
 
 @catalogo_blueprint.route('/agregar', methods=['GET', 'POST'])
 def agregar_catalogo():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: tienes que acceder al sistema para realizar esta acción.")
     if request.method == 'POST':
         nombre_catalogo = request.form['nombre_catalogo']
 
@@ -43,6 +52,9 @@ def agregar_catalogo():
 # Ruta para editar un material (UPDATE)
 @catalogo_blueprint.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar_catalogo(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: tienes que acceder al sistema para realizar esta acción.")
     catalogo = app.models.Catalogo.query.get(id)
 
     if request.method == 'POST':
@@ -61,6 +73,9 @@ def editar_catalogo(id):
 # Ruta para eliminar un material (DELETE)
 @catalogo_blueprint.route('/eliminar/<int:id>')
 def eliminar_catalgo(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     catalogo = app.models.Catalogo.query.get(id)
     if catalogo:
         app.db.session.delete(catalogo)

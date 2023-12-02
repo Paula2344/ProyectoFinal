@@ -143,46 +143,62 @@
   </div>
 </footer>
 
+<!-- Asegúrate de incluir la biblioteca SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
+
 <script>
   document.querySelector('#btn-register').addEventListener('click', function(event) {
     event.preventDefault(); // Prevenir el comportamiento predeterminado del botón
 
-    // Obtener los datos del material
-    const nombre = document.getElementById('nombre').value;
-    const descripcion = document.getElementById('descripcion').value;
+    // Obtener el precio
     const precio = document.getElementById('precio').value;
-    const cantidad_stock = document.getElementById('cantidad_stock').value;
-    const unidad_medida = document.getElementById('unidad_medida').value;
-    const color = document.getElementById('color').value;
 
-    // Validar los datos del material
-    if (!nombre || !descripcion || !precio || !cantidad_stock || !unidad_medida || !color) {
-      // Mostrar un mensaje de advertencia
+    // Validar que el precio sea mayor o igual a 10000
+    if (precio < 10000) {
+      // Mostrar un mensaje de error
       Swal.fire({
-        title: 'Advertencia',
-        text: 'Por favor, complete todos los campos antes de registrar el material.',
-        icon: 'warning',
+        title: 'Error',
+        text: 'El precio mínimo permitido es de 10000.',
+        icon: 'error',
       });
     } else {
-      // Mostrar la ventana emergente de confirmación
-      Swal.fire({
-        title: 'Registrar Material',
-        text: '¿Estás seguro de registrar este material?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sí',
-        cancelButtonText: 'No',
-        closeOnConfirm: false,
-        closeOnCancel: false,
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Enviar el formulario para registrar el material
-          document.querySelector('form').submit();
-        }
-      });
+      // Obtener los demás datos del material
+      const nombre = document.getElementById('nombre').value;
+      const descripcion = document.getElementById('descripcion').value;
+      const cantidad_stock = document.getElementById('cantidad_stock').value;
+      const unidad_medida = document.getElementById('unidad_medida').value;
+      const color = document.getElementById('color').value;
+
+      // Validar los datos del material
+      if (!nombre || !descripcion || !cantidad_stock || !unidad_medida || !color) {
+        // Mostrar un mensaje de advertencia
+        Swal.fire({
+          title: 'Advertencia',
+          text: 'Por favor, complete todos los campos antes de registrar el material.',
+          icon: 'warning',
+        });
+      } else {
+        // Mostrar la ventana emergente de confirmación
+        Swal.fire({
+          title: 'Registrar Material',
+          text: '¿Estás seguro de registrar este material?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Sí',
+          cancelButtonText: 'No',
+          closeOnConfirm: false,
+          closeOnCancel: false,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Enviar el formulario para registrar el material
+            document.querySelector('form').submit();
+          }
+        });
+      }
     }
   });
 </script>
+
 
 
   

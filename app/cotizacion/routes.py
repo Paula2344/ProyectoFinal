@@ -1,4 +1,4 @@
-from flask import render_template, request, flash
+from flask import render_template, request, flash,jsonify
 from flask_mail import Message
 from reportlab.lib.pagesizes import letter, landscape
 from reportlab.lib.utils import ImageReader
@@ -9,14 +9,18 @@ from io import BytesIO
 import app
 from . import cotizacion_blueprint
 from reportlab.platypus import PageTemplate, Frame, Image
+from app.utils import is_logged_in
 
 @cotizacion_blueprint.route('/generar_cotizacion/<int:id>', methods=['GET', 'POST'])
 def generar_cotizacion(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
+
     orden_servicio = app.models.OrdenServicio.query.get(id)
 
     if orden_servicio is None:
-        flash('La orden de servicio no se encontró', 'error')
-        return render_template('error.html')
+         return jsonify({"success": False, "message": "El precio total debe ser al menos 10000"})
 
     materiales = app.models.Material.query.all()
     correo_enviado = False  # Variable para indicar si se ha enviado el correo
@@ -26,14 +30,17 @@ def generar_cotizacion(id):
         nombre = request.form.get('nombre')
         telefono = request.form.get('telefono')
         correo_electronico = request.form.get('correo_electronico')
-        detalles_adicionales = request.form.get('detallesAdicionales')
-        materialFk = request.form.get('materialFk')
+        materialNombre = request.form.get('materialNombre')
         tipoServicio = request.form.get('tipoServicio')
         incluye = request.form.get('incluye')
         precioTotal = request.form.get('precioTotal')
+        
+        if float(precioTotal) < 10000:
+            flash('Error: El precio no puede ser menor a 10000', 'error')
+            return render_template('generar_cotizacion.html', message='Error: El precio no puede ser menor a 10000')
 
         # Consulta la base de datos para obtener el nombre del material
-        material = app.models.Material.query.get(materialFk)
+        material = app.models.Material.query.filter_by(nombre_material=materialNombre).first()
 
         if material:
             nombre_material = material.nombre_material
@@ -105,7 +112,6 @@ def generar_cotizacion(id):
             ["Nombre:", nombre],
             ["Teléfono:", telefono],
             ["Correo Electrónico:", correo_electronico],
-            ["Detalles Adicionales:", detalles_adicionales],
             ["Material:", nombre_material],
             ["Tipo de Servicio:", tipoServicio],
             ["¿Qué incluye?:", incluye],
@@ -142,6 +148,7 @@ def generar_cotizacion(id):
         msg.attach('cotizacion.pdf', 'application/pdf', pdf_buffer.read())
         app.mail.send(msg)
 
-        correo_enviado = True  # Marcar el correo como enviado
+        correo_enviado = True
+        return jsonify({"success": True})
 
     return render_template('generar_cotizacion.html', orden_servicio=orden_servicio, materiales=materiales, correo_enviado=correo_enviado)

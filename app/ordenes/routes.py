@@ -2,13 +2,17 @@ from datetime import datetime
 from flask import abort, redirect, render_template, request, url_for
 from . import ordenes_blueprint
 import app 
-from flask import jsonify
+from flask import jsonify,flash
 import os
 from werkzeug.utils import secure_filename 
 from random import sample
+from app.utils import is_logged_in
 
 @ordenes_blueprint.route('/listar')
 def listar_ordenes():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     ordenes = app.models.OrdenServicio.query.all()
     return render_template('listar_ordenes.html', ordenes=ordenes)
 
@@ -16,6 +20,9 @@ def listar_ordenes():
 
 @ordenes_blueprint.route('/mostrar/<int:id>')
 def mostrar_registro(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     usuario = app.models.Usuario.query.get(id)
     if usuario is None:
         abort(404)  # Manejo de error si el cliente no existe
@@ -27,6 +34,9 @@ def mostrar_registro(id):
 # Ruta para agregar una nueva orden de servicio (CREATE)
 @ordenes_blueprint.route('/agregar/<int:id>', methods=['GET', 'POST'])
 def agregar_orden(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     usuario = app.models.Usuario.query.get(id)
     if request.method == 'POST':
         nombre = request.form['nombre']
@@ -66,14 +76,15 @@ def agregar_orden(id):
     materialFk = app.models.Material.query.all()
     return render_template('agregar_orden.html', usuario=usuario, materialFk=materialFk)
 
-
-
-
 # Ruta para editar una orden de servicio (UPDATE)
 @ordenes_blueprint.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar_orden(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     orden = app.models.OrdenServicio.query.get(id)
     usuarios = app.models.Usuario.query.all()
+
     if request.method == 'POST':
         orden.nombre = request.form['nombre']
         orden.telefono = request.form['telefono']
@@ -81,34 +92,41 @@ def editar_orden(id):
         orden.materialFk = request.form['materialFk']
         orden.tipoServicio = request.form['tipoServicio']
         orden.detallesAdicionales = request.form['detallesAdicionales']
-        if(request.files['imagen1'] !=''):
-            file     = request.files['imagen1'] #recibiendo el archivo
-            orden.imagen1 = recibeFoto(file)
-        if(request.files['imagen2'] !=''):
-            file     = request.files['imagen2'] #recibiendo el archivo
-            orden.imagen2 = recibeFoto(file)
-        if(request.files['imagen3'] !=''):
-            file     = request.files['imagen3'] #recibiendo el archivo
-            orden.imagen3 = recibeFoto(file)
-        
+
+        # Verificar si se proporcionaron archivos de imagen
+        if 'imagen1' in request.files:
+            file = request.files['imagen1']
+            if file.filename != '':
+                orden.imagen1 = recibeFoto(file)
+
+        if 'imagen2' in request.files:
+            file = request.files['imagen2']
+            if file.filename != '':
+                orden.imagen2 = recibeFoto(file)
+
+        if 'imagen3' in request.files:
+            file = request.files['imagen3']
+            if file.filename != '':
+                orden.imagen3 = recibeFoto(file)
+
         app.db.session.commit()
-        
-        return render_template('editar_orden.html', orden=orden, usuarios=usuarios)
-    
-    
+        # Envía una respuesta JSON de éxito
+
     return render_template('editar_orden.html', orden=orden, usuarios=usuarios)
 
 # Ruta para eliminar una orden de servicio (DELETE)
 @ordenes_blueprint.route('/eliminar/<int:id>')
 def eliminar_orden(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     orden = app.models.OrdenServicio.query.get(id)
     usuario = app.models.Usuario.query.all()
-    
+
     if orden:
         app.db.session.delete(orden)
         app.db.session.commit()
-    
-    return render_template('listar_ordenesCliente.html', orden=orden, usuario=usuario) 
+        return render_template('listar_ordenesCliente.html', orden=orden, usuario=usuario)
 
 
 

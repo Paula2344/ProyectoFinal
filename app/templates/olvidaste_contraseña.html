@@ -16,28 +16,54 @@
     <div class="wrapper bg-white">
         <div class="h2 text-center">Tapiplas</div>
         <div class="h4 text-muted text-center pt-2">Ingrese su correo para poder recuperar su cuenta</div>
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
+    
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
                 {% for message in messages %}
-                   
+                <script>
+                    $(document).ready(function(){
+                        // Muestra SweetAlert si hay mensajes flash
+                        {% with messages = get_flashed_messages() %}
+                            {% if messages %}
+                                Swal.fire({
+                                    title: '{{ messages[0] }}',
+                                    icon: 'success',
+                                    confirmButtonText: 'Aceptar'
+                                }).then(function() {
+                                    window.location.href = '{{ url_for("usuario_blueprint.login") }}';
+                                });
+                            {% endif %}
+                        {% endwith %}
+                
+                        // Muestra SweetAlert de error si no se encuentra el usuario
+                        {% if "No se encontró un usuario con este correo electrónico." in messages %}
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'No se encontró un usuario con este correo electrónico.',
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            });
+                        {% endif %}
+                        
+                        $("#enviarBtn").click(function(){
+                            $("#passwordForm").submit();
+                        });
+                    });
+                </script>
                 {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    <form method="POST">
-        <form class="pt-3" method="POST">
+            {% endif %}
+        {% endwith %}
+    
+        <form id="passwordForm" class="pt-3" method="POST">
             <div class="form-group py-2">
                 <div class="input-field">
                     <span class="far fa-user p-2"></span>
                     <input type="email" name="email" placeholder="Correo" autocomplete="off" required><br>
                 </div>
-        <input type="submit" class="btn btn-block text-center my-3" value="Enviar Contraseña Provisional">
-
-    </form>
-</div>
-</div>
-</div>
+            </div>
+            <input type="button" id="enviarBtn" class="btn btn-block text-center my-3" value="Enviar Contraseña Provisional">
+        </form>
+    </div>
     
     <footer class="site-footer">
         <div class="container">
@@ -54,6 +80,13 @@
             </div>
         </div>
     </footer>
-
+    
+    <script>
+        $(document).ready(function(){
+            $("#enviarBtn").click(function(){
+                $("#passwordForm").submit();
+            });
+        });
+    </script>
 </body>
 </html>

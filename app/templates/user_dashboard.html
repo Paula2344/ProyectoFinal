@@ -50,7 +50,7 @@
           <li><a class="nav-link scrollto" href="#portfolio">Materiales</a></li>
           <li class="scroll-to-section"><a href="/ordenes/mostrar/{{usuarios.id}}">Ver mis ordenes de servicio</a></li>
           <li class="scroll-to-section"><a href="/usuarios/perfil/{{ usuarios.id }}">Ver perfil</a></li>
-          <li class="scroll-to-section"><a href="#" id="logout-link">Cerrar sesión</a></li>
+          <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesión</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
@@ -58,25 +58,7 @@
     </div>
   </header><!-- End Header -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.7/dist/sweetalert2.all.min.js"></script>
-  <script>
-      // Agrega un evento clic al enlace "Cerrar sesión"
-      document.getElementById('logout-link').addEventListener('click', function (event) {
-          event.preventDefault();
-          Swal.fire({
-              title: 'Cerrar Sesión',
-              text: '¿Estás seguro de que deseas cerrar sesión?',
-              icon: 'question',
-              showCancelButton: true,
-              confirmButtonText: 'Sí',
-              cancelButtonText: 'No',
-          }).then((result) => {
-              if (result.isConfirmed) {
-                  // Redirige al usuario a la ruta de logout si confirma
-                  window.location.href = "{{ url_for('usuario_blueprint.logout') }}";
-              }
-          });
-      });
-  </script>
+
 
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex align-items-center">
@@ -102,9 +84,6 @@
           <div class="col-lg-12 d-flex justify-content-center">
             <ul id="portfolio-flters">
               <li data-filter="*" class="filter-active">Todos</li>
-              <li data-filter=".filter-app">Algodon</li>
-              <li data-filter=".filter-card">Cuero</li>
-              <li data-filter=".filter-web">Terciopelo</li>
             </ul>
           </div>
         </div>

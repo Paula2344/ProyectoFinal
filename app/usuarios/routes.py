@@ -11,7 +11,7 @@ import app
 #from app.models import Material
 from . import usuario_blueprint
 from flask import flash, url_for, render_template
-
+from app.utils import is_logged_in
 
 
 #from flask_bcrypt import generate_password_hash
@@ -75,7 +75,7 @@ def registro():
 
         else:
             nuevo_usuario = app.models.Usuario(nombre=nombre, apellido=apellido, telefono=telefono,
-                                               correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=2, codigo_verificacion=codigo_verificacion)
+                                               correo_electronico=correo, direccion=direccion, contrasena=contrasena, rol_id=1, codigo_verificacion=codigo_verificacion)
             app.db.session.add(nuevo_usuario)
             app.db.session.commit()
 
@@ -110,8 +110,10 @@ def verificar():
 
 
 @usuario_blueprint.route('/dashboard')
-@login_required
 def dashboard():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: tienes que acceder al sistema para realizar esta acción.")
     usuarios = app.models.Usuario.query.all()
     materialFk = app.models.Material.query.all()
     if current_user.rol.nombre_rol == 'admin':
@@ -145,6 +147,9 @@ def actualizar_perfil(usuario_id, nombre, apellido, correo, direccion,contrasena
     
 @usuario_blueprint.route('/perfil/<int:id>', methods=['GET', 'POST'])
 def perfil(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: tienes que acceder al sistema para realizar esta acción.")
     usuario = app.models.Usuario.query.get(id)
 
     if request.method == 'POST':
@@ -166,6 +171,9 @@ def perfil(id):
 
 @usuario_blueprint.route('/perfil-actualizar/<int:id>', methods=['GET', 'POST'])
 def perfil_actualizar(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     usuario = app.models.Usuario.query.get(id)
 
     if request.method == 'POST':
@@ -201,7 +209,6 @@ def generar_contraseña_aleatoria(longitud=8):
     contraseña = ''.join(random.choice(caracteres) for _ in range(longitud))
     return contraseña
 
-# Ruta para solicitar un restablecimiento de contraseña
 @usuario_blueprint.route('/olvidaste_contraseña', methods=['GET', 'POST'])
 def olvidaste_contraseña():
     if request.method == 'POST':
@@ -223,7 +230,7 @@ def olvidaste_contraseña():
                 try:
                     app.mail.send(mensaje)
                     flash('Se ha enviado una contraseña provisional a tu correo electrónico.', 'success')
-                    return redirect(url_for('usuario_blueprint.login'))
+                    return redirect(url_for('usuario_blueprint.olvidaste_contraseña'))  # Redirige a la misma página
                 except Exception as e:
                     flash('No se pudo enviar la contraseña provisional. Verifica tu dirección de correo electrónico.', 'danger')
             else:
@@ -234,6 +241,9 @@ def olvidaste_contraseña():
 
 @usuario_blueprint.route('/registerAdmin', methods=['GET', 'POST'])
 def registroAdmin():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     if request.method == 'POST':
         nombre = request.form['nombre']
         apellido = request.form['apellido']

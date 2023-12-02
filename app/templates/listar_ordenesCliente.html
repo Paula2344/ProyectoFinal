@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html>
 
-
-
 <head>
     <title>Lista de Catalogo</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/footer.css')}}">
     <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='css/templatemo-hexashop.css')}}">
     <title>Actualizar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
     <script src="../../static/js/imagen.js"></script>
+    <!-- Agrega SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
+
 <body>
     <header class="header-area header-sticky">
         <div class="container">
@@ -25,32 +29,32 @@
                         <ul class="nav">
                             <li class="scroll-to-section"><a href="/usuarios/logout">Cerrar sesion</a></li>
                             <li class="submenu">
-                                <a href="javascript:;">¿Que deseas hacer?</a>
-                              <ul>
-                                <li><a href="/ordenes/agregar/{{ usuario.id }}" class="submenu">
-                                    <p> Cotizar </p>
+                                <a href="javascript:;">¿Qué deseas hacer?</a>
+                                <ul>
+                                    <li><a href="/ordenes/agregar/{{ usuario.id }}" class="submenu">
+                                            <p> Cotizar </p>
+                                        </a></li>
                                     <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
-                                        <p> Consultar ordenes De servicio </p>
-                                  
-                                    <li><a href="/ordenes/mostrar/{{ usuario.id }}" class="submenu">
-                                        <p> Eliminar orden </p>
+                                            <p> Consultar órdenes de servicio </p>
+                                        </a></li>
                                     <li><a href="/usuarios/dashboard" class="submenu">
-                                          <p> Volver al menu  </p>
-                                    </a></li>
+                                            <p> Volver al menú </p>
+                                        </a></li>
                                 </ul>
-                          </li>
-                      </ul>        
+                            </li>
+                        </ul>
                         <!-- ***** Menu End ***** -->
                     </nav>
                 </div>
             </div>
         </div>
     </header>
-    <br>
-    <br>
-    <br>
-    <br>
     
+    <br>
+    <br>
+    <br>
+    <br>
+
     <h1>Lista de Órdenes de Servicio para {{ usuario.nombre }}</h1>
     <table class="table table-bordered custom-table">
         <thead class="table-dark">
@@ -67,7 +71,7 @@
                 <th>Eliminar</th>
             </tr>
         </thead>
-    
+
         <tbody>
             {% for registro in ordenes %}
             <tr>
@@ -101,10 +105,9 @@
                     </a>
                 </td>
                 <td>
-                    <a href="/ordenes/eliminar/{{ registro.id }}">
-                        <button class="btn custom-btn btn-danger btn-sm" data-bs-toggle="modal"
-                            data-bs-target="#modal{{registro.id}}">Eliminar</button>
-                    </a>
+                    <!-- Agrega la función de confirmación al botón Eliminar -->
+                    <button class="btn custom-btn btn-danger btn-sm"
+                        onclick="confirmarEliminacion('{{ registro.id }}')">Eliminar</button>
                 </td>
             </tr>
             {% endfor %}
@@ -124,27 +127,60 @@
     <br>
     <br>
     <br>
-    
+
     <footer class="site-footer">
         <div class="container">
-          <div class="row">
-            <div class="col-md-8 col-sm-6 col-xs-12">
-              <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
-              </p>
-            </div>
-  
-            <div class="col-md-4 col-sm-6 col-xs-12">
-              <ul class="social-icons">
-                <li><a class="facebook" href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i class="fa fa-facebook"></i></a></li>
-                <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i class="fa fa-whatsapp"></i></a></li>   
-              </ul>
-            </div>
-          </div>
-        </div>
-  </footer>
-    
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-xs-12">
+                    <p class="copyright-text">Copyright &copy; 2023 Empresa Tapiplas.
+                    </p>
+                </div>
 
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <ul class="social-icons">
+                        <li><a class="facebook"
+                                href="https://www.facebook.com/profile.php?id=100064243835236&mibextid=ZbWKwL"><i
+                                    class="fa fa-facebook"></i></a></li>
+                        <li><a class="whatsapp" href="https://wa.me/c/573102381123"><i
+                                    class="fa fa-whatsapp"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Agrega el script de confirmación -->
+    <script>
+        function confirmarEliminacion(id) {
+            Swal.fire({
+                title: 'Confirmar Eliminación',
+                text: '¿Estás seguro de que deseas eliminar esta orden de servicio?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // El usuario confirmó la eliminación, aquí puedes enviar la solicitud.
+                    Swal.fire({
+                        title: 'Orden de servicio eliminada',
+                        text: 'La orden de servicio se ha eliminado con éxito.',
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Aceptar'
+                    }).then(() => {
+                        // Aquí puedes redirigir o realizar otras acciones después de aceptar la segunda ventana emergente.
+                        window.location.href = `/ordenes/eliminar/${id}`;
+                    });
+                }
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+   
 </body>
 
 </html>
-

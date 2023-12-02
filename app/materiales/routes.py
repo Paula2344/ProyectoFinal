@@ -1,9 +1,10 @@
-from flask import redirect, render_template, request,jsonify
+from flask import redirect, render_template, request,jsonify,flash
 import os
 from werkzeug.utils import secure_filename
 import app
 from . import materiales_blueprint
 from random import sample
+from app.utils import is_logged_in
 
 # Directorio donde se guardarán las imágenes
 UPLOAD_FOLDER = 'static/imagenes_material'
@@ -14,6 +15,9 @@ def allowed_file(filename):
 
 @materiales_blueprint.route('/agregar', methods=['GET', 'POST'])
 def agregar_material():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: tienes que acceder al sistema para realizar esta acción.")
     if request.method == 'POST':
         nombre = request.form['nombre']
         descripcion = request.form['descripcion']
@@ -21,6 +25,11 @@ def agregar_material():
         cantidad_stock = request.form['cantidad_stock']
         unidad_medida = request.form['unidad_medida']
         color = request.form['color']
+        
+        if float(precio) < 10000:
+            flash('Error: El precio mínimo permitido es de 10000.', 'error')
+            return redirect('/materiales/agregar')
+
         
         if 'imagen' in request.files:
             file = request.files['imagen']
@@ -37,6 +46,9 @@ def agregar_material():
 #Definir rutas
 @materiales_blueprint.route('/listar')
 def listar_materiales():
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     materiales = app.models.Material.query.all()
     return render_template('listar_materiales.html', materiales=materiales)
 
@@ -46,6 +58,9 @@ def listar_materiales():
 
 @materiales_blueprint.route('/editar/<int:id>', methods=['GET', 'POST'])
 def editar_material(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     material = app.models.Material.query.get(id)
     
     if request.method == 'POST':
@@ -75,6 +90,9 @@ def editar_material(id):
 # Ruta para eliminar un material (DELETE)
 @materiales_blueprint.route('/eliminar/<int:id>')
 def eliminar_material(id):
+    if not is_logged_in():
+        flash('Error: tienes que acceder al sistema para realizar esta acción.', 'error')
+        return render_template("error.html", message="Error: Tienes que acceder al sistema para realizar esta acción.")
     material = app.models.Material.query.get(id)
     
     if material:

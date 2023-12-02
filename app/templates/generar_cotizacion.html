@@ -90,13 +90,8 @@
         </div>
 
         <div class="form-outline mb-4">
-            <label for="materialFk" >Seleccionar un material:</label>
-            <select id="materialFk" name="materialFk">
-                <option value="">Seleccionar...</option>
-                {% for material in materiales %}
-                    <option value="{{ material.id }}">{{ material.nombre_material }} - Color: {{ material.color }} </option>
-                {% endfor %}
-            </select>
+            <label for="materialNombre">Nombre del material</label><br>
+            <input type="text" name="materialNombre" value="{{ orden_servicio.material.nombre_material }}" class="form-control" readonly>
         </div>
 
     <div class="form-outline mb-4">
@@ -160,88 +155,62 @@
       </footer>
       
       <script>
-    {% if correo_enviado %}
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
-            Swal.fire('¡Éxito!', 'Cotización enviada por correo', 'success').then(function() {
-                window.location.href = '{{ url_for("cotizacion_blueprint.generar_cotizacion", id=orden_servicio.id) }}';
+        document.addEventListener('DOMContentLoaded', function () {
+            // Selector del formulario
+            const cotizacionForm = document.querySelector('form');
+    
+            // Agregar un manejador de eventos al formulario
+            cotizacionForm.addEventListener('submit', function (event) {
+                event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
+    
+                // Obtén el valor del precio total
+                const precioTotal = parseFloat(document.getElementById('precioTotal').value);
+    
+                // Verifica si el precio es menor a 10000
+                if (precioTotal < 10000) {
+                    // Muestra un mensaje de error con SweetAlert
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'El precio total debe ser al menos 10000',
+                        icon: 'error',
+                    });
+                } else {
+                    // Crea un objeto FormData con los datos del formulario
+                    const formData = new FormData(cotizacionForm);
+    
+                    // Realizar una solicitud AJAX al servidor para enviar la cotización
+                    fetch('{{ url_for("cotizacion_blueprint.generar_cotizacion", id=orden_servicio.id) }}', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Cotización enviada con éxito, muestra un mensaje de éxito con SweetAlert
+                            Swal.fire({
+                                title: 'Cotización enviada',
+                                text: 'La cotización ha sido enviada con éxito.',
+                                icon: 'success',
+                            }).then(function() {
+                                // Redirige a la página de la orden de servicio después de cerrar la ventana emergente
+                                window.location.href = '{{ url_for("cotizacion_blueprint.generar_cotizacion", id=orden_servicio.id) }}';
+                            });
+                        } else {
+                            // Hubo un error al enviar la cotización, muestra un mensaje de error con SweetAlert
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Hubo un error al enviar la cotización. Por favor, inténtalo de nuevo.',
+                                icon: 'error',
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error al enviar la cotización:', error);
+                    });
+                }
             });
-        </script>
-    {% endif %}
-
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class="flash-messages">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          // Selector del botón "Enviar Cotización"
-          const enviarCotizacionButton = document.getElementById('enviar-cotizacion');
-      
-          // Agregar un manejador de eventos al botón
-          enviarCotizacionButton.addEventListener('click', function() {
-              // Mostrar la ventana emergente SweetAlert
-              Swal.fire({
-                  title: '¿Estás seguro de enviar la cotización?',
-                  text: 'Una vez enviada, no se puede deshacer esta acción.',
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonText: 'Sí, enviar',
-                  cancelButtonText: 'Cancelar'
-              }).then((result) => {
-                  if (result.isConfirmed) {
-                      // Si el usuario confirma, puedes realizar una solicitud AJAX para enviar la cotización al servidor.
-                      // Aquí, te proporciono un ejemplo genérico de cómo podrías hacerlo:
-      
-                      // Obtener los datos del formulario (debes ajustar esto según tu estructura de datos)
-                      const nombre = document.getElementById('nombre').value;
-                      const telefono = document.getElementById('telefono').value;
-                      const correo_electronico = document.getElementById('correo_electronico').value;
-                      const detallesAdicionales = document.getElementById('detallesAdicionales').value;
-                      const materialFk = document.getElementById('materialFk').value;
-                      const tipoServicio = document.getElementById('tipoServicio').value;
-                      const incluye = document.getElementById('incluye').value;
-                      const precioTotal = document.getElementById('precioTotal').value;
-      
-                      // Crear un objeto con los datos a enviar
-                      const cotizacionData = {
-                          nombre,
-                          telefono,
-                          correo_electronico,
-                          detallesAdicionales,
-                          materialFk,
-                          tipoServicio,
-                          incluye,
-                          precioTotal,
-                      };
-      
-                      // Realizar una solicitud AJAX al servidor (ajusta la URL y el método según tu backend)
-                      fetch('/tu_ruta_de_backend', {
-                          method: 'POST',
-                          headers: {
-                              'Content-Type': 'application/json',
-                          },
-                          body: JSON.stringify(cotizacionData),
-                      })
-                      .then(response => response.json())
-                      .then(data => {
-                          // Manejar la respuesta del servidor, por ejemplo, mostrar una notificación de éxito
-                          Swal.fire('Cotización enviada', 'La cotización ha sido enviada con éxito.', 'success');
-                      })
-                      .catch(error => {
-                          // Manejar errores, por ejemplo, mostrar una notificación de error
-                          Swal.fire('Error', 'Hubo un error al enviar la cotización.', 'error');
-                      });
-                  }
-              });
-          });
-      });
-      </script>
+        });
+    </script>
       
       
 </body>

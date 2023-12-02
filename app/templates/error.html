@@ -1,11 +1,30 @@
+<!-- Agrega esto en el encabezado de tu error.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Error</title>
+    <!-- Agrega SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 </head>
 <body>
-    <h1>Soy el error</h1>
+    <script>
+        // Agrega un script que muestra SweetAlert2 al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: '{{ message }}',  // Puedes cambiar esto según cómo pasas el mensaje desde tu aplicación
+                confirmButtonText: 'Aceptar',
+                allowOutsideClick: false  // Evita que el usuario cierre la alerta haciendo clic afuera
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Redirecciona al index
+                    window.location.href = '/';
+                }
+            });
+        });
+    </script>
 </body>
 </html>
