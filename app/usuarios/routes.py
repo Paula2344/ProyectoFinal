@@ -40,7 +40,6 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash('Has cerrado sesión', 'success')
     return redirect(url_for('usuario_blueprint.login'))
 
 @usuario_blueprint.route('/register', methods=['GET', 'POST'])
